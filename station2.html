@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <title>######s Quest – Station 2</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1"buchet MS", Arial, sans-serif;    <meta name="viewport" content="width=device-width, initial-scale=1" />
+            padding: 40px 16px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 { text-align: center; }
+        .card {
+            background: #151522;
+            border: 1px solid #2b2b3d;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+        }
+        label { display: block; margin: 12px 0 6px; }
+        input[type="text"]{
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #3a3a57;
+            background: #0f0f19;
+            color: #fff;
+            font-size: 16px;
+        }
+        .btn {
+            display: inline-block;
+            padding: 12px 18px;
+            font-size: 16px;
+            background: #4b0082;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 14px;
+            cursor: pointer;
+            border: none;
+        }
+        .btn:hover, .btn:focus { background: #6a0dad; }
+        .note { color: #bfb6ff; font-size: 0.98rem; }
+        .error { color: #ff7a7a; margin-top: 10px; min-height: 1.2em; }
+        .success { color: #9cffb0; margin-top: 10px; }
+        .backlink { display: inline-block; margin-top: 18px; color: #9da3ff; }
+        .sr-only {
+            position: absolute; width: 1px; height: 1px;
+            padding: 0; margin: -1px; overflow: hidden;
+            clip: rect(0,0,0,0); border: 0;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>🪄 Station 2 – Die Hausfrage</h1>
+    <div class="card">
+        <p class="note">
+            „Welches Tier steht im Hogwarts‑Wappen für dein Haus, <em>wenn du eine Katze wärst</em>?“
+        </p>
+
+        <form id="riddleForm" autocomplete="off">
+            <label for="answer">Deine Antwort (ein Wort genügt):</label>
+            <input id="answer" name="answer" type="text" placeholder="z. B. Löwe" required />
+            <button class="btn" type="submit">Prüfen</button>
+            <div id="feedback" class="error" role="status" aria-live="polite"></div>
+        </form>
+
+        index.html⬅️ Zurück zu Station 1</a>
+    </div>
+
+    <script>
+        // Du kannst hier festlegen, welche Antworten gelten sollen.
+        // Beispiel: Wenn ###### Gryffindor wäre → "Löwe" als Hauptlösung.
+        // Wir akzeptieren mehrere Synonyme/Sprachen & Schreibweisen.
+        const validAnswers = new Set([
+            "löwe","loewe","lion","gryffindor",
+            "rabe","raven","ravenclaw"
+        ]);
+
+        // Optional: Wenn du nur EINE Lösung willst, nimm z. B. nur "löwe" heraus.
+        // const validAnswers = new Set(["löwe","loewe","lion","gryffindor"]);
+
+        const form = document.getElementById("riddleForm");
+        const answerInput = document.getElementById("answer");
+        const feedback = document.getElementById("feedback");
+
+        function normalize(s) {
+            return s
+              .toLowerCase()
+              .trim()
+              .normalize("NFD")
+              .replace(/[\u0300-\u036f]/g, ""); // Umlaute vereinheitlichen
+        }
+
+        form.addEventListener("submit", (e) => {
+            e.preventDefault();
+            const val = normalize(answerInput.value);
+
+            if (!val) {
+                feedback.textContent = "Bitte gib eine Antwort ein.";
+                return;
+            }
+
+            if (validAnswers.has(val)) {
+                feedback.classList.remove("error");
+                feedback.classList.add("success");
+                feedback.textContent = "Richtig! Weiter zur nächsten Station …";
+                // Kurze Verzögerung, dann weiter
+                setTimeout(() => {
+                    window.location.href = "station3.html";
+                }, 800);
+            } else {
+                // Humorvolle Fehlermeldung
+                feedback.classList.remove("success");
+                feedback.classList.add("error");
+                const snark = [
+                    "Fast! Aber die Katze schüttelt nur den Kopf.",
+                    "Nope – die sprechende Mütze kichert leise.",
+                    "Nicht ganz. Die Eulen tuscheln schon … versuch’s nochmal!"
+                ];
+                feedback.textContent = snark[Math.floor(Math.random()*snark.length)];
+            }
+        });
+    </script>
+
+</body>
+</html>
+``
+    <style>
+        :root { color-scheme: dark; }
+        body {
+            background: #0b0b10;
+            color: #e7e7f7;
