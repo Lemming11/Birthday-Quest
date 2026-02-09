@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8" />
+    <title>######s Quest – Station 1</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <style>
+        :root {
+            color-scheme: dark;
+        }
+        body {
+            background: #0d0d0d;
+            color: #e6e6e6;
+            font-family: "Trebuchet MS", Arial, sans-serif;
+            text-align: center;
+            padding: 50px 16px;
+        }
+        #content { margin-top: 60px; }
+        .hidden { display: none; }
+        .btn {
+            display: inline-block;
+            padding: 14px 22px;
+            font-size: 18px;
+            background: #4b0082;
+            color: #fff;
+            border-radius: 8px;
+            text-decoration: none;
+            margin-top: 20px;
+            transition: background .2s ease;
+        }
+        .btn:hover, .btn:focus { background: #6a0dad; }
+        #countdown { font-size: 1.1rem; margin-top: 10px; color: #cfc3ff; }
+        h1 { margin-bottom: .4em; }
+    </style>
+</head>
+<body>
+
+    <h1>✨ Willkommen, ###### der 30. Stufe ✨</h1>
+    <p>Die Gilde der Veganen Schattenmagier bereitet deine Initiation vor...</p>
+
+    <div id="beforeUnlock">
+        <h2>⏳ Die Sterne stehen noch nicht günstig.</h2>
+        <p>Du darfst fortfahren, sobald es Mitternacht schlägt...</p>
+        <p id="countdown" aria-live="polite"></p>
+    </div>
+
+    <div id="afterUnlock" class="hidden">
+        <h2>🌙 Die Sterne haben sich ausgerichtet!</h2>
+        <p>Deine Quest beginnt jetzt.</p>
+        <!-- Nach Freischaltung direkt anklickbar -->
+        <a href=./station2.html>➡️ Quest starten</a>
+    </div>
+
+    <script>
+        // !!! Hier Geburtstag/0-Uhr-Datum eintragen !!!
+        // Format: Jahr, Monat-1, Tag, Stunde, Minute, Sekunde
+        // Beispiel: 10. Februar 2026, 00:00 Uhr
+        const unlockDate = new Date(2026, 1, 9, 18, 45, 0);
+
+        const before = document.getElementById("beforeUnlock");
+        const after  = document.getElementById("afterUnlock");
+        const countdown = document.getElementById("countdown");
+
+        function pad(n){ return n.toString().padStart(2,"0"); }
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = unlockDate - now;
+
+            if (diff <= 0) {
+                before.classList.add("hidden");
+                after.classList.remove("hidden");
+                return;
+            }
+
+            const totalSeconds = Math.floor(diff / 1000);
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+
+            countdown.textContent = `Noch ${hours}h ${pad(minutes)}m ${pad(seconds)}s bis zur Aktivierung...`;
+        }
+
+        updateTimer();
+        const t = setInterval(updateTimer, 1000);
+    </script>
+
+</body>
+</html>
