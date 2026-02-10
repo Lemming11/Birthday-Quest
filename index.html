@@ -4,11 +4,14 @@
     <meta charset="UTF-8" />
     <meta name="description" content="Deine Quest beginnt..." />
     <meta name="theme-color" content="#0d0d0d" />
-    <title>######s Quest – Station 1</title>
+    <title>######s Quest</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
         :root {
             color-scheme: dark;
+        }
+        * {
+            box-sizing: border-box;
         }
         body {
             background: #0d0d0d;
@@ -16,8 +19,15 @@
             font-family: "Trebuchet MS", Arial, sans-serif;
             text-align: center;
             padding: 50px 16px;
+            margin: 0;
         }
-        .hidden { display: none; }
+        #content {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .hidden { 
+            display: none; 
+        }
         .btn {
             display: inline-block;
             padding: 14px 22px;
@@ -29,6 +39,7 @@
             margin-top: 20px;
             transition: background .2s ease;
             cursor: pointer;
+            border: none;
         }
         .btn:hover, .btn:focus { 
             background: #6a0dad;
@@ -38,59 +49,74 @@
             margin-top: 10px; 
             color: #d4c5ff;
         }
-        h1 { margin-bottom: .4em; }
+        h1 { 
+            margin-bottom: .4em; 
+        }
+        /* Station 2 specific styles */
+        .card {
+            background: #151522;
+            border: 1px solid #2b2b3d;
+            border-radius: 10px;
+            padding: 24px;
+            margin-top: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.28);
+            text-align: left;
+        }
+        label { 
+            display: block; 
+            margin: 12px 0 6px; 
+            font-weight: 500;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px 14px;
+            border-radius: 8px;
+            border: 1px solid #3a3a57;
+            background: #0f0f19;
+            color: #fff;
+            font-size: 16px;
+        }
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #6a0dad;
+            box-shadow: 0 0 0 3px rgba(106, 10, 173, 0.1);
+        }
+        .note { 
+            color: #bfb6ff; 
+            font-size: 0.98rem; 
+        }
+        .error { 
+            color: #ff7a7a; 
+            margin-top: 10px; 
+            min-height: 1.2em; 
+        }
+        .success { 
+            color: #9cffb0; 
+            margin-top: 10px; 
+        }
+        .backlink { 
+            display: inline-block; 
+            margin-top: 18px; 
+            color: #9da3ff;
+            background: transparent;
+            border: 1px solid #9da3ff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .backlink:hover {
+            background: #9da3ff;
+            color: #0d0d0d;
+        }
     </style>
 </head>
 <body>
-
-    <h1>✨ Willkommen, ###### der 30. Stufe ✨</h1>
-    <p>Die Gilde der Veganen Schattenmagier bereitet deine Initiation vor...</p>
-
-    <div id="beforeUnlock">
-        <h2>⏳ Die Sterne stehen noch nicht günstig.</h2>
-        <p>Du darfst fortfahren, sobald es Mitternacht schlägt...</p>
-        <p id="countdown" aria-live="polite"></p>
+    <div id="content">
+        <!-- Stationen werden hier dynamisch geladen -->
+        <h1>⏳ Lade Quest...</h1>
     </div>
 
-    <div id="afterUnlock" class="hidden">
-        <h2>🌙 Die Sterne haben sich ausgerichtet!</h2>
-        <p>Deine Quest beginnt jetzt.</p>
-        <a href="./station2.html" class="btn">➡️ Quest starten</a>
-    </div>
-
-    <script>
-        // !!! Hier Geburtstag/0-Uhr-Datum eintragen !!!
-        // Format: Jahr, Monat-1, Tag, Stunde, Minute, Sekunde
-        // Beispiel: 10. Februar 2026, 00:00 Uhr
-        const unlockDate = new Date(2026, 1, 9, 18, 46, 0);
-
-        const before = document.getElementById("beforeUnlock");
-        const after  = document.getElementById("afterUnlock");
-        const countdown = document.getElementById("countdown");
-
-        function pad(n){ return n.toString().padStart(2,"0"); }
-
-        function updateTimer() {
-            const now = new Date();
-            const diff = unlockDate - now;
-
-            if (diff <= 0) {
-                before.classList.add("hidden");
-                after.classList.remove("hidden");
-                return;
-            }
-
-            const totalSeconds = Math.floor(diff / 1000);
-            const hours = Math.floor(totalSeconds / 3600);
-            const minutes = Math.floor((totalSeconds % 3600) / 60);
-            const seconds = totalSeconds % 60;
-
-            countdown.textContent = `Noch ${hours}h ${pad(minutes)}m ${pad(seconds)}s bis zur Aktivierung...`;
-        }
-
-        updateTimer();
-        setInterval(updateTimer, 1000);
-    </script>
-
+    <script src="./js/quest.js"></script>
 </body>
 </html>
