@@ -2,6 +2,8 @@
 <html lang="de">
 <head>
     <meta charset="UTF-8" />
+    <meta name="description" content="Deine Quest beginnt..." />
+    <meta name="theme-color" content="#0d0d0d" />
     <title>######s Quest – Station 1</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
@@ -15,7 +17,6 @@
             text-align: center;
             padding: 50px 16px;
         }
-        #content { margin-top: 60px; }
         .hidden { display: none; }
         .btn {
             display: inline-block;
@@ -27,9 +28,16 @@
             text-decoration: none;
             margin-top: 20px;
             transition: background .2s ease;
+            cursor: pointer;
         }
-        .btn:hover, .btn:focus { background: #6a0dad; }
-        #countdown { font-size: 1.1rem; margin-top: 10px; color: #cfc3ff; }
+        .btn:hover, .btn:focus { 
+            background: #6a0dad;
+        }
+        #countdown { 
+            font-size: 1.1rem; 
+            margin-top: 10px; 
+            color: #d4c5ff;
+        }
         h1 { margin-bottom: .4em; }
     </style>
 </head>
@@ -47,8 +55,7 @@
     <div id="afterUnlock" class="hidden">
         <h2>🌙 Die Sterne haben sich ausgerichtet!</h2>
         <p>Deine Quest beginnt jetzt.</p>
-        <!-- Nach Freischaltung direkt anklickbar -->
-        <a href=./station2.html>➡️ Quest starten</a>
+        <a href="./station2.html" class="btn">➡️ Quest starten</a>
     </div>
 
     <script>
@@ -82,7 +89,7 @@
         }
 
         updateTimer();
-        const t = setInterval(updateTimer, 1000);
+        setInterval(updateTimer, 1000);
     </script>
 
 </body>
