@@ -2,13 +2,28 @@
 <p><em>Fast drei Dekaden liegen hinter dir. Die letzte Nacht der dritten wartet.</em><br>
 <em>Doch bevor die vierte beginnt... bereitet sich etwas vor.</em></p>
 <p>Die Gilde der Veganen Schattenmagier ruft dich – sobald die Sterne günstig stehen...</p>
-
 <div id="beforeUnlock">
     <h2>⏳ Die Sterne stehen noch nicht günstig.</h2>
     <p>Du darfst fortfahren, sobald es soweit ist...</p>
-    <p id="countdown" aria-live="polite"></p>
+    <div id="countdown" aria-live="polite">
+        <div class="timer-display">
+            <div class="time-unit">
+                <span id="hours">00</span>
+                <span class="label">h</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-unit">
+                <span id="minutes">00</span>
+                <span class="label">m</span>
+            </div>
+            <span class="separator">:</span>
+            <div class="time-unit">
+                <span id="seconds">00</span>
+                <span class="label">s</span>
+            </div>
+        </div>
+    </div>
 </div>
-
 <div id="afterUnlock" class="hidden">
     <h2>🌙 Die Sterne haben sich ausgerichtet!</h2>
     <p><em>Drei Dekaden hast du gemeistert. Die vierte beginnt JETZT.</em><br>
