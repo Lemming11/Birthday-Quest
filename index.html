@@ -109,6 +109,28 @@
             background: #9da3ff;
             color: #0d0d0d;
         }
+
+        /* Digital countdown styles */
+        .timer-display {
+          display: inline-flex;
+          gap: 10px;
+          align-items: center;
+          justify-content: center;
+          margin-top: 12px;
+        }
+        .time-unit {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: #1a1232;
+          padding: 10px 14px;
+          border-radius: 8px;
+          min-width: 56px;
+          box-shadow: 0 6px 18px rgba(0,0,0,0.35);
+        }
+        .time-unit span { color: #fff; font-weight: 700; font-size: 1.4rem; }
+        .time-unit .label { font-size: 0.7rem; color: #cfc3ff; margin-top: 4px; font-weight: 500; }
+        .separator { color: #cfc3ff; font-size: 1.6rem; }
     </style>
 </head>
 <body>
