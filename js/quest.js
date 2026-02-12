@@ -265,6 +265,9 @@ function initStation3() {
     const rows = solution.length;
     const cols = solution[0].length;
     let userGrid = Array(rows).fill(null).map(() => Array(cols).fill(0));
+    let puzzleSolved = false;
+    let isDragging = false;
+    let dragFillValue = null;
     
     // Create the grid
     function createGrid() {
@@ -326,11 +329,30 @@ function initStation3() {
                 
                 updateCellStyle(td, r, c);
                 
-                // Click to toggle cell
+                // Click to toggle cell (only if puzzle not solved)
                 td.addEventListener('click', () => {
+                    if (puzzleSolved) return;
                     userGrid[r][c] = userGrid[r][c] === 1 ? 0 : 1;
                     updateCellStyle(td, r, c);
                     checkSolution();
+                });
+                
+                // Drag to fill multiple cells
+                td.addEventListener('mousedown', (e) => {
+                    if (puzzleSolved) return;
+                    e.preventDefault();
+                    isDragging = true;
+                    dragFillValue = userGrid[r][c] === 1 ? 0 : 1;
+                    userGrid[r][c] = dragFillValue;
+                    updateCellStyle(td, r, c);
+                });
+                
+                td.addEventListener('mouseenter', () => {
+                    if (puzzleSolved) return;
+                    if (isDragging && dragFillValue !== null) {
+                        userGrid[r][c] = dragFillValue;
+                        updateCellStyle(td, r, c);
+                    }
                 });
                 
                 tr.appendChild(td);
@@ -343,12 +365,12 @@ function initStation3() {
     
     function updateCellStyle(cell, r, c) {
         if (userGrid[r][c] === 1) {
-            // Filled cell - red color
-            cell.style.background = '#ff4d4d';
+            // Filled cell - black during solving, red when solved
+            cell.style.background = puzzleSolved ? '#ff4d4d' : '#000000';
             cell.textContent = '';
         } else {
-            // Empty cell - light background
-            cell.style.background = '#f5f5f5';
+            // Empty cell - white background
+            cell.style.background = '#ffffff';
             cell.textContent = '';
         }
     }
@@ -366,6 +388,16 @@ function initStation3() {
         }
         
         if (correct) {
+            puzzleSolved = true;
+            // Update all cells to show red color
+            const cells = document.querySelectorAll('#nonogram-grid td[data-row]');
+            cells.forEach(cell => {
+                const r = parseInt(cell.dataset.row);
+                const c = parseInt(cell.dataset.col);
+                updateCellStyle(cell, r, c);
+                // Remove cursor pointer style for locked cells
+                cell.style.cursor = 'default';
+            });
             feedback.className = 'success';
             feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
             sessionStorage.setItem('station3Completed', 'true');
@@ -380,6 +412,7 @@ function initStation3() {
     
     function resetGrid() {
         userGrid = Array(rows).fill(null).map(() => Array(cols).fill(0));
+        puzzleSolved = false;
         createGrid();
         feedback.className = '';
         feedback.textContent = '';
@@ -393,10 +426,20 @@ function initStation3() {
     // Initialize
     createGrid();
     
+    // Add global mouseup listener to stop dragging and check solution
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            dragFillValue = null;
+            checkSolution();
+        }
+    });
+    
     // Check if already completed
     const completed = sessionStorage.getItem('station3Completed');
     if (completed === 'true') {
         // Restore solution
+        puzzleSolved = true;
         userGrid = solution.map(row => [...row]);
         createGrid();
         feedback.className = 'success';
