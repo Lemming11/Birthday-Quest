@@ -15,7 +15,7 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 ### HTML Structure
 - Use semantic HTML5 elements
 - Each station is a separate HTML file in the `stations/` directory
-- Station numbering starts at 1 for the first task (station2.html), with station1.html being the unnumbered start page
+- Station file naming: `station1.html` is the unnumbered start/countdown page, then actual challenges start with `station2.html` (labeled "Station 1"), `station3.html` (labeled "Station 2"), etc.
 - All stations use a `.card` div container with heading, content, and navigation buttons
 - Use `aria-live="polite"` for dynamic feedback messages
 - Include proper `role="status"` attributes for accessibility
@@ -31,6 +31,7 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 
 ### CSS & Styling
 - Use embedded CSS in `index.html` (no external stylesheets)
+- Inline styles are acceptable for station-specific layout adjustments (e.g., `text-align: center`)
 - Follow the established dark theme color scheme:
   - Background: `#0d0d0d`
   - Text: `#e6e6e6`
@@ -93,6 +94,8 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 6. Ensure back/continue button handlers are configured
 
 ### Station HTML Template
+Note: Replace `{N}` with the actual station number (e.g., `continueBtn2` for Station 1 in station2.html)
+
 ```html
 <div class="card">
     <h1 style="text-align: center;">✨ Station X – Title</h1>
@@ -106,6 +109,8 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 ```
 
 ### Station Init Function Pattern
+Note: Replace `{N}` with actual numbers (e.g., `initStation2()` for station2.html)
+
 ```javascript
 function initStation{N}() {
     const backBtn = document.getElementById('backBtn');
