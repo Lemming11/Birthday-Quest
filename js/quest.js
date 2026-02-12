@@ -49,6 +49,12 @@ async function loadStation(stationNumber) {
                 
                 if (stationNumber === 2) {
                     initStation2();
+                } else if (stationNumber === 3) {
+                    initStation3();
+                } else if (stationNumber === 4) {
+                    initStation4();
+                } else if (stationNumber === 5) {
+                    initStation5();
                 }
             } catch (error) {
                 content.innerHTML = '<h1>❌ Fehler</h1><p>Diese Station existiert noch nicht.</p>';
@@ -150,10 +156,11 @@ function initStation2() {
         
         if (validAnswers.has(val)) {
             feedback.className = 'success';
-            feedback.textContent = "Richtig! ✨ Super! Weitere Stationen folgen bald...";
+            feedback.textContent = "Richtig! ✨ Super! Weiter zur nächsten Station...";
             sessionStorage.setItem('station2Completed', 'true');
             
-            // Hier später: loadStation(3); wenn Station 3 existiert
+            // Zur nächsten Station
+            setTimeout(() => loadStation(3), 1500);
         } else {
             feedback.className = 'error';
             const snark = [
@@ -169,6 +176,60 @@ function initStation2() {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(1);
+        });
+    }
+}
+
+// Station 3: Platzhalter
+function initStation3() {
+    const continueBtn = document.getElementById('continueBtn3');
+    const backBtn = document.getElementById('backBtn3');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station3Completed', 'true');
+            loadStation(4);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(2);
+        });
+    }
+}
+
+// Station 4: Platzhalter
+function initStation4() {
+    const continueBtn = document.getElementById('continueBtn4');
+    const backBtn = document.getElementById('backBtn4');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station4Completed', 'true');
+            loadStation(5);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(3);
+        });
+    }
+}
+
+// Station 5: Platzhalter
+function initStation5() {
+    const backBtn = document.getElementById('backBtn5');
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(4);
         });
     }
 }
