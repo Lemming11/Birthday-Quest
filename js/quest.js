@@ -196,15 +196,224 @@ function initStation2() {
     }
 }
 
-// Station 3: Platzhalter
+// Station 3: Nonogram
 function initStation3() {
     const continueBtn = document.getElementById('continueBtn3');
     const backBtn = document.getElementById('backBtn3');
+    const resetBtn = document.getElementById('resetBtn');
+    const feedback = document.getElementById('nonogram-feedback');
+    
+    // Heart pattern (11x11 grid)
+    // 1 = filled, 0 = empty
+    const solution = [
+        [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
+        [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+        [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+    ];
+    
+    // Calculate row and column clues
+    function calculateClues(grid) {
+        const rows = grid.length;
+        const cols = grid[0].length;
+        const rowClues = [];
+        const colClues = [];
+        
+        // Row clues
+        for (let r = 0; r < rows; r++) {
+            const clue = [];
+            let count = 0;
+            for (let c = 0; c < cols; c++) {
+                if (grid[r][c] === 1) {
+                    count++;
+                } else if (count > 0) {
+                    clue.push(count);
+                    count = 0;
+                }
+            }
+            if (count > 0) clue.push(count);
+            rowClues.push(clue.length > 0 ? clue : [0]);
+        }
+        
+        // Column clues
+        for (let c = 0; c < cols; c++) {
+            const clue = [];
+            let count = 0;
+            for (let r = 0; r < rows; r++) {
+                if (grid[r][c] === 1) {
+                    count++;
+                } else if (count > 0) {
+                    clue.push(count);
+                    count = 0;
+                }
+            }
+            if (count > 0) clue.push(count);
+            colClues.push(clue.length > 0 ? clue : [0]);
+        }
+        
+        return { rowClues, colClues };
+    }
+    
+    const { rowClues, colClues } = calculateClues(solution);
+    const rows = solution.length;
+    const cols = solution[0].length;
+    let userGrid = Array(rows).fill(null).map(() => Array(cols).fill(0));
+    
+    // Create the grid
+    function createGrid() {
+        const container = document.getElementById('nonogram-grid');
+        container.innerHTML = '';
+        
+        const table = document.createElement('table');
+        table.style.margin = '20px auto';
+        table.style.borderCollapse = 'collapse';
+        table.style.background = '#f5f5f5';
+        
+        // Header row with column clues
+        const headerRow = document.createElement('tr');
+        const cornerCell = document.createElement('td');
+        cornerCell.style.background = '#2b2b3d';
+        cornerCell.style.border = '1px solid #666';
+        headerRow.appendChild(cornerCell);
+        
+        for (let c = 0; c < cols; c++) {
+            const th = document.createElement('td');
+            th.textContent = colClues[c].join(' ');
+            th.style.padding = '8px';
+            th.style.textAlign = 'center';
+            th.style.fontWeight = 'bold';
+            th.style.background = '#2b2b3d';
+            th.style.color = '#d4c5ff';
+            th.style.border = '1px solid #666';
+            th.style.minWidth = '40px';
+            headerRow.appendChild(th);
+        }
+        table.appendChild(headerRow);
+        
+        // Grid rows
+        for (let r = 0; r < rows; r++) {
+            const tr = document.createElement('tr');
+            
+            // Row clue
+            const rowClueCell = document.createElement('td');
+            rowClueCell.textContent = rowClues[r].join(' ');
+            rowClueCell.style.padding = '8px';
+            rowClueCell.style.textAlign = 'right';
+            rowClueCell.style.fontWeight = 'bold';
+            rowClueCell.style.background = '#2b2b3d';
+            rowClueCell.style.color = '#d4c5ff';
+            rowClueCell.style.border = '1px solid #666';
+            rowClueCell.style.minWidth = '60px';
+            tr.appendChild(rowClueCell);
+            
+            // Grid cells
+            for (let c = 0; c < cols; c++) {
+                const td = document.createElement('td');
+                td.style.width = '40px';
+                td.style.height = '40px';
+                td.style.border = '1px solid #666';
+                td.style.cursor = 'pointer';
+                td.style.transition = 'background 0.2s';
+                td.dataset.row = r;
+                td.dataset.col = c;
+                
+                updateCellStyle(td, r, c);
+                
+                // Click to toggle cell
+                td.addEventListener('click', () => {
+                    userGrid[r][c] = userGrid[r][c] === 1 ? 0 : 1;
+                    updateCellStyle(td, r, c);
+                    checkSolution();
+                });
+                
+                tr.appendChild(td);
+            }
+            table.appendChild(tr);
+        }
+        
+        container.appendChild(table);
+    }
+    
+    function updateCellStyle(cell, r, c) {
+        if (userGrid[r][c] === 1) {
+            // Filled cell - red color
+            cell.style.background = '#ff4d4d';
+            cell.textContent = '';
+        } else {
+            // Empty cell - light background
+            cell.style.background = '#f5f5f5';
+            cell.textContent = '';
+        }
+    }
+    
+    function checkSolution() {
+        let correct = true;
+        for (let r = 0; r < rows; r++) {
+            for (let c = 0; c < cols; c++) {
+                if (userGrid[r][c] !== solution[r][c]) {
+                    correct = false;
+                    break;
+                }
+            }
+            if (!correct) break;
+        }
+        
+        if (correct) {
+            feedback.className = 'success';
+            feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
+            sessionStorage.setItem('station3Completed', 'true');
+            if (continueBtn) {
+                continueBtn.disabled = false;
+            }
+        } else {
+            feedback.className = '';
+            feedback.textContent = '';
+        }
+    }
+    
+    function resetGrid() {
+        userGrid = Array(rows).fill(null).map(() => Array(cols).fill(0));
+        createGrid();
+        feedback.className = '';
+        feedback.textContent = '';
+        if (continueBtn) {
+            continueBtn.disabled = true;
+        }
+    }
+    
+    // Initialize
+    createGrid();
+    
+    // Check if already completed
+    const completed = sessionStorage.getItem('station3Completed');
+    if (completed === 'true') {
+        // Restore solution
+        userGrid = solution.map(row => [...row]);
+        createGrid();
+        feedback.className = 'success';
+        feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
+        if (continueBtn) {
+            continueBtn.disabled = false;
+        }
+    }
+    
+    if (resetBtn) {
+        resetBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            resetGrid();
+        });
+    }
     
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            sessionStorage.setItem('station3Completed', 'true');
             loadStation(4);
         });
     }
