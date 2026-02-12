@@ -329,15 +329,7 @@ function initStation3() {
                 
                 updateCellStyle(td, r, c);
                 
-                // Click to toggle cell (only if puzzle not solved)
-                td.addEventListener('click', () => {
-                    if (puzzleSolved) return;
-                    userGrid[r][c] = userGrid[r][c] === 1 ? 0 : 1;
-                    updateCellStyle(td, r, c);
-                    checkSolution();
-                });
-                
-                // Drag to fill multiple cells
+                // Mousedown to toggle cell or start dragging
                 td.addEventListener('mousedown', (e) => {
                     if (puzzleSolved) return;
                     e.preventDefault();
@@ -347,6 +339,7 @@ function initStation3() {
                     updateCellStyle(td, r, c);
                 });
                 
+                // Drag to fill multiple cells
                 td.addEventListener('mouseenter', () => {
                     if (puzzleSolved) return;
                     if (isDragging && dragFillValue !== null) {
