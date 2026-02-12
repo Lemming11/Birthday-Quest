@@ -15,7 +15,7 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 ### HTML Structure
 - Use semantic HTML5 elements
 - Each station is a separate HTML file in the `stations/` directory
-- Station file naming: `station1.html` is the unnumbered start/countdown page, then actual challenges start with `station2.html` (labeled "Station 1"), `station3.html` (labeled "Station 2"), etc.
+- Station file naming: `station0.html` is the unnumbered start/countdown page, then actual challenges start with `station1.html` (labeled "Station 1"), `station2.html` (labeled "Station 2"), etc.
 - All stations use a `.card` div container with heading, content, and navigation buttons
 - Use `aria-live="polite"` for dynamic feedback messages
 - Include proper `role="status"` attributes for accessibility
@@ -95,9 +95,9 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 
 ### Station HTML Template
 Note: Replace placeholders with actual values:
-- `{N}` = file number (e.g., 2 for station2.html)
-- `{X}` = display number shown to users (e.g., 1 for station2.html, which is "Station 1")
-- For station2.html: `continueBtn2`, heading "Station 1", button text "Weiter zu Station 2"
+- `{N}` = file number (e.g., 1 for station1.html)
+- `{X}` = display number shown to users (e.g., 1 for station1.html, which is "Station 1")
+- For station1.html: `continueBtn1`, heading "Station 1", button text "Weiter zu Station 2"
 
 ```html
 <div class="card">
@@ -112,7 +112,7 @@ Note: Replace placeholders with actual values:
 ```
 
 ### Station Init Function Pattern
-Note: Replace `{N}` with actual numbers (e.g., `initStation2()` for station2.html)
+Note: Replace `{N}` with actual numbers (e.g., `initStation1()` for station1.html)
 
 ```javascript
 function initStation{N}() {
@@ -151,11 +151,11 @@ Birthday-Quest/
 ├── js/
 │   └── quest.js        # Main quest logic and station management
 └── stations/
-    ├── station1.html   # Start/countdown page
-    ├── station2.html   # First challenge
-    ├── station3.html   # Second challenge
-    ├── station4.html   # Third challenge
-    └── station5.html   # Fourth challenge
+    ├── station0.html   # Start/countdown page
+    ├── station1.html   # First challenge
+    ├── station2.html   # Second challenge
+    ├── station3.html   # Third challenge
+    └── station4.html   # Fourth challenge
 ```
 
 ## Pull Request Guidelines
