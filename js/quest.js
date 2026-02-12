@@ -135,6 +135,7 @@ function initStation2() {
     const answerInput = document.getElementById('answer');
     const feedback = document.getElementById('feedback');
     const backBtn = document.getElementById('backBtn');
+    const continueBtn = document.getElementById('continueBtn2');
     
     function normalize(s) {
         return s
@@ -159,6 +160,11 @@ function initStation2() {
             feedback.textContent = "Richtig! ✨ Super! Weiter zur nächsten Station...";
             sessionStorage.setItem('station2Completed', 'true');
             
+            // Enable continue button
+            if (continueBtn) {
+                continueBtn.disabled = false;
+            }
+            
             // Zur nächsten Station
             setTimeout(() => loadStation(3), 1500);
         } else {
@@ -176,6 +182,19 @@ function initStation2() {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(1);
+        });
+    }
+    
+    if (continueBtn) {
+        // Check if station is already completed
+        const completed = sessionStorage.getItem('station2Completed');
+        if (completed === 'true') {
+            continueBtn.disabled = false;
+        }
+        
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(3);
         });
     }
 }
