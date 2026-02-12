@@ -383,7 +383,9 @@ function initStation3() {
         createGrid();
         feedback.className = '';
         feedback.textContent = '';
-        if (continueBtn) {
+        // Don't disable the continue button if station is already completed
+        const completed = sessionStorage.getItem('station3Completed');
+        if (continueBtn && completed !== 'true') {
             continueBtn.disabled = true;
         }
     }
