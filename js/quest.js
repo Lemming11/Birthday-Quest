@@ -164,9 +164,6 @@ function initStation2() {
             if (continueBtn) {
                 continueBtn.disabled = false;
             }
-            
-            // Zur nächsten Station
-            setTimeout(() => loadStation(3), 1500);
         } else {
             feedback.className = 'error';
             const snark = [
