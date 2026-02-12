@@ -1,16 +1,16 @@
 <div class="card">
-    <h1 style="text-align: center;">🪄 Station 1 – Die Hausfrage</h1>
+    <h1 style="text-align: center;">🧩 Station 2 – Das Nonogramm</h1>
     <p class="note">
-        „Welches Tier steht im Hogwarts‑Wappen für dein Haus, <em>wenn du eine Katze wärst</em>?"
+        Fülle die richtigen Kästchen aus, um das Bild zu enthüllen! Die Zahlen am Rand zeigen dir, wie viele Felder hintereinander ausgefüllt werden müssen.
     </p>
 
-    <form id="riddleForm" autocomplete="off">
-        <label for="answer">Deine Antwort (ein Wort genügt):</label>
-        <input id="answer" name="answer" type="text" placeholder="z. B. Löwe" required />
-        <button class="btn" type="submit">Prüfen</button>
-        <div id="feedback" class="error" role="status" aria-live="polite"></div>
-    </form>
+    <div id="nonogram-container">
+        <div id="nonogram-grid"></div>
+    </div>
 
-    <button id="backBtn" class="btn">⬅️ Zurück zur Startseite</button>
-    <button id="continueBtn2" class="btn" disabled>➡️ Weiter zu Station 2</button>
+    <div id="nonogram-feedback" class="error" role="status" aria-live="polite"></div>
+
+    <button id="resetBtn" class="btn" style="margin-right: 10px;">🔄 Zurücksetzen</button>
+    <button id="backBtn2" class="btn">⬅️ Zurück zu Station 1</button>
+    <button id="continueBtn2" class="btn" disabled>➡️ Weiter zu Station 3</button>
 </div>

@@ -4,7 +4,7 @@
 const UNLOCK_DATE = new Date(2026, 1, 11, 18, 30, 0); // 2026-02-11 18:30:00
 
 // Aktueller Quest-Zustand
-let currentStation = 1;
+let currentStation = 0;
 
 // Initialisierung
 document.addEventListener('DOMContentLoaded', () => {
@@ -21,8 +21,8 @@ document.addEventListener('DOMContentLoaded', () => {
 async function loadStation(stationNumber) {
     const content = document.getElementById('content');
     
-    // Prüfe ob Station 1 freigeschaltet ist
-    if (stationNumber === 1) {
+    // Prüfe ob Station 0 freigeschaltet ist
+    if (stationNumber === 0) {
         const now = new Date();
         const isUnlocked = now >= UNLOCK_DATE;
         
@@ -31,9 +31,9 @@ async function loadStation(stationNumber) {
             const html = await response.text();
             content.innerHTML = html;
             
-            // Station 1 spezifische Logik
-            if (stationNumber === 1) {
-                initStation1(isUnlocked);
+            // Station 0 spezifische Logik
+            if (stationNumber === 0) {
+                initStation0(isUnlocked);
             }
         } catch (error) {
             content.innerHTML = '<h1>❌ Fehler beim Laden</h1><p>Station konnte nicht geladen werden.</p>';
@@ -47,14 +47,14 @@ async function loadStation(stationNumber) {
                 const html = await response.text();
                 content.innerHTML = html;
                 
-                if (stationNumber === 2) {
+                if (stationNumber === 1) {
+                    initStation1();
+                } else if (stationNumber === 2) {
                     initStation2();
                 } else if (stationNumber === 3) {
                     initStation3();
                 } else if (stationNumber === 4) {
                     initStation4();
-                } else if (stationNumber === 5) {
-                    initStation5();
                 }
             } catch (error) {
                 content.innerHTML = '<h1>❌ Fehler</h1><p>Diese Station existiert noch nicht.</p>';
@@ -68,8 +68,8 @@ async function loadStation(stationNumber) {
     sessionStorage.setItem('currentStation', stationNumber);
 }
 
-// Station 1: Countdown-Timer
-function initStation1(isUnlocked) {
+// Station 0: Countdown-Timer
+function initStation0(isUnlocked) {
     const before = document.getElementById('beforeUnlock');
     const after = document.getElementById('afterUnlock');
     const countdown = document.getElementById('countdown');
@@ -118,14 +118,14 @@ function initStation1(isUnlocked) {
     if (startBtn) {
         startBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            sessionStorage.setItem('station1Completed', 'true');
-            loadStation(2);
+            sessionStorage.setItem('station0Completed', 'true');
+            loadStation(1);
         });
     }
 }
 
-// Station 2: Rätsel
-function initStation2() {
+// Station 1: Rätsel
+function initStation1() {
     const validAnswers = new Set([
         "löwe", "loewe", "lion", "gryffindor",
         "rabe", "raven", "ravenclaw"
@@ -135,7 +135,7 @@ function initStation2() {
     const answerInput = document.getElementById('answer');
     const feedback = document.getElementById('feedback');
     const backBtn = document.getElementById('backBtn');
-    const continueBtn = document.getElementById('continueBtn2');
+    const continueBtn = document.getElementById('continueBtn1');
     
     function normalize(s) {
         return s
@@ -158,7 +158,7 @@ function initStation2() {
         if (validAnswers.has(val)) {
             feedback.className = 'success';
             feedback.textContent = "Richtig! ✨ Super! Weiter zur nächsten Station...";
-            sessionStorage.setItem('station2Completed', 'true');
+            sessionStorage.setItem('station1Completed', 'true');
             
             // Enable continue button
             if (continueBtn) {
@@ -178,28 +178,28 @@ function initStation2() {
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loadStation(1);
+            loadStation(0);
         });
     }
     
     if (continueBtn) {
         // Check if station is already completed
-        const completed = sessionStorage.getItem('station2Completed');
+        const completed = sessionStorage.getItem('station1Completed');
         if (completed === 'true') {
             continueBtn.disabled = false;
         }
         
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loadStation(3);
+            loadStation(2);
         });
     }
 }
 
-// Station 3: Nonogram
-function initStation3() {
-    const continueBtn = document.getElementById('continueBtn3');
-    const backBtn = document.getElementById('backBtn3');
+// Station 2: Nonogram
+function initStation2() {
+    const continueBtn = document.getElementById('continueBtn2');
+    const backBtn = document.getElementById('backBtn2');
     const resetBtn = document.getElementById('resetBtn');
     const feedback = document.getElementById('nonogram-feedback');
     
@@ -393,7 +393,7 @@ function initStation3() {
             });
             feedback.className = 'success';
             feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
-            sessionStorage.setItem('station3Completed', 'true');
+            sessionStorage.setItem('station2Completed', 'true');
             if (continueBtn) {
                 continueBtn.disabled = false;
             }
@@ -410,7 +410,7 @@ function initStation3() {
         feedback.className = '';
         feedback.textContent = '';
         // Don't disable the continue button if station is already completed
-        const completed = sessionStorage.getItem('station3Completed');
+        const completed = sessionStorage.getItem('station2Completed');
         if (continueBtn && completed !== 'true') {
             continueBtn.disabled = true;
         }
@@ -429,7 +429,7 @@ function initStation3() {
     });
     
     // Check if already completed
-    const completed = sessionStorage.getItem('station3Completed');
+    const completed = sessionStorage.getItem('station2Completed');
     if (completed === 'true') {
         // Restore solution
         puzzleSolved = true;
@@ -452,6 +452,27 @@ function initStation3() {
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
+            loadStation(3);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(1);
+        });
+    }
+}
+
+// Station 3: Platzhalter
+function initStation3() {
+    const continueBtn = document.getElementById('continueBtn3');
+    const backBtn = document.getElementById('backBtn3');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station3Completed', 'true');
             loadStation(4);
         });
     }
@@ -466,33 +487,12 @@ function initStation3() {
 
 // Station 4: Platzhalter
 function initStation4() {
-    const continueBtn = document.getElementById('continueBtn4');
     const backBtn = document.getElementById('backBtn4');
-    
-    if (continueBtn) {
-        continueBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            sessionStorage.setItem('station4Completed', 'true');
-            loadStation(5);
-        });
-    }
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(3);
-        });
-    }
-}
-
-// Station 5: Platzhalter
-function initStation5() {
-    const backBtn = document.getElementById('backBtn5');
-    
-    if (backBtn) {
-        backBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadStation(4);
         });
     }
 }
