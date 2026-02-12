@@ -345,7 +345,6 @@ function initStation3() {
                     dragFillValue = userGrid[r][c] === 1 ? 0 : 1;
                     userGrid[r][c] = dragFillValue;
                     updateCellStyle(td, r, c);
-                    checkSolution();
                 });
                 
                 td.addEventListener('mouseenter', () => {
@@ -356,24 +355,12 @@ function initStation3() {
                     }
                 });
                 
-                td.addEventListener('mouseup', () => {
-                    if (isDragging) {
-                        checkSolution();
-                    }
-                });
-                
                 tr.appendChild(td);
             }
             table.appendChild(tr);
         }
         
         container.appendChild(table);
-        
-        // Add global mouseup listener to stop dragging
-        document.addEventListener('mouseup', () => {
-            isDragging = false;
-            dragFillValue = null;
-        });
     }
     
     function updateCellStyle(cell, r, c) {
@@ -438,6 +425,15 @@ function initStation3() {
     
     // Initialize
     createGrid();
+    
+    // Add global mouseup listener to stop dragging and check solution
+    document.addEventListener('mouseup', () => {
+        if (isDragging) {
+            isDragging = false;
+            dragFillValue = null;
+            checkSolution();
+        }
+    });
     
     // Check if already completed
     const completed = sessionStorage.getItem('station3Completed');
