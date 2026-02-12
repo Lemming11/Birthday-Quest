@@ -94,17 +94,20 @@ Birthday-Quest is a web-based interactive birthday quest/scavenger hunt applicat
 6. Ensure back/continue button handlers are configured
 
 ### Station HTML Template
-Note: Replace `{N}` with the actual station number (e.g., `continueBtn2` for Station 1 in station2.html)
+Note: Replace placeholders with actual values:
+- `{N}` = file number (e.g., 2 for station2.html)
+- `{X}` = display number shown to users (e.g., 1 for station2.html, which is "Station 1")
+- For station2.html: `continueBtn2`, heading "Station 1", button text "Weiter zu Station 2"
 
 ```html
 <div class="card">
-    <h1 style="text-align: center;">✨ Station X – Title</h1>
+    <h1 style="text-align: center;">✨ Station {X} – Title</h1>
     <p class="note">Station content...</p>
     
     <!-- Station-specific elements -->
     
     <button id="backBtn" class="btn">⬅️ Zurück zur vorherigen Station</button>
-    <button id="continueBtn{N}" class="btn" disabled>➡️ Weiter zu Station {N+1}</button>
+    <button id="continueBtn{N}" class="btn" disabled>➡️ Weiter zu Station {X+1}</button>
 </div>
 ```
 
