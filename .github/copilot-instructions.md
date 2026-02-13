@@ -1,167 +1,89 @@
-# Copilot Instructions for Birthday-Quest
+# Copilot-Richtlinien für Birthday-Quest
 
-## Project Overview
+## Projektüberblick
+Birthday-Quest ist eine webbasierte, interaktive Geburtstags-Schnitzeljagd (mehrere Stationen), erstellt mit reinem HTML, CSS und JavaScript (ohne Frameworks). Stationen werden nacheinander basierend auf Zeit/Fortschritt freigeschaltet. Deutschsprachige Inhalte, dunkles magisches Design.
 
-Birthday-Quest is a web-based interactive birthday quest/scavenger hunt application built with vanilla HTML, CSS, and JavaScript. The application features multiple sequential stations (challenges) that unlock based on time and user progress. It's designed as a personalized birthday experience with a dark theme and magical aesthetic.
+**Tech-Stack**
+- HTML5, CSS3, JavaScript (ES6+)
+- Rein clientseitig (kein Backend)
+- Fortschritt via `sessionStorage`
+- Deutsch als Primärsprache
 
-**Tech Stack:**
-- Pure HTML5, CSS3, and JavaScript (no frameworks)
-- Client-side only (no backend)
-- Uses `sessionStorage` for progress tracking
-- Designed for German language content
+## Struktur & Namensgebung
+- Jede Station ist eine eigene HTML-Datei im Ordner `stations/`.
+- `station0.html`: Start/Countdown (unnummeriert, Einleitung).
+- `station1.html`, `station2.html`, …: nummerierte, klar betitelte Aufgaben.
+- Jede Seite nutzt eine `.card`-Containerstruktur mit Überschrift, Inhalt, Navigation.
+- Buttons: „Zurück" links, „Weiter" rechts.
 
-## Coding Standards & Conventions
+## HTML-Konventionen
+- Semantische HTML5-Elemente verwenden.
+- Für dynamische Rückmeldungen `role="status"` und `aria-live="polite"`.
+- Formulare mit `autocomplete="off"`; Felder klar beschriften (Labels).
 
-### HTML Structure
-- Use semantic HTML5 elements
-- Each station is a separate HTML file in the `stations/` directory
-- Station file naming: `station0.html` is the unnumbered start/countdown page, then actual challenges start with `station1.html` (labeled "Station 1"), `station2.html` (labeled "Station 2"), etc.
-- All stations use a `.card` div container with heading, content, and navigation buttons
-- Use `aria-live="polite"` for dynamic feedback messages
-- Include proper `role="status"` attributes for accessibility
+## JavaScript-Konventionen
+- Kein Framework, nur Vanilla JS (ES6+).
+- Zentrale Quest-Logik in `js/quest.js`.
+- Pro Station eine `initStation{N}()`-Funktion zum Setzen von Event-Listenern.
+- Fortschritt in `sessionStorage` (Schlüssel: `currentStation`, `station{N}Completed`).
+- Asynchronität mit `async/await` (falls Stationen dynamisch geladen werden).
+- Ereignisse ausschließlich via `addEventListener` (keine Inline-Handler).
+- Eingaben vor Prüfung normalisieren: `.toLowerCase()`, `.trim()`, `.normalize("NFD")`.
 
-### JavaScript
-- Use vanilla JavaScript (ES6+) - no frameworks or libraries
-- All quest logic is in `js/quest.js`
-- Each station requires an `initStation{N}()` function that sets up event listeners
-- Station progression is tracked via `sessionStorage` with keys like `station{N}Completed` and `currentStation`
-- Use `async/await` for loading station HTML files
-- Use `addEventListener` for event handling, never inline handlers
-- Normalize user input before validation using `.toLowerCase()`, `.trim()`, and `.normalize("NFD")`
+## Navigation & Fluss
+- „Weiter"-Buttons sind initial deaktiviert; Aktivierung erst nach erfolgreichem Abschluss.
+- „Zurück"-Buttons führen zur vorherigen Station.
+- Stationen werden nur nach Validierung freigegeben; Manipulation des Fortschritts vermeiden.
 
-### CSS & Styling
-- Use embedded CSS in `index.html` (no external stylesheets)
-- Inline styles are acceptable for station-specific layout adjustments (e.g., `text-align: center`)
-- Follow the established dark theme color scheme:
-  - Background: `#0d0d0d`
+## Formulare & Feedback
+- Formulare ordentlich kapseln und `e.preventDefault()` nutzen.
+- Klare, freundliche deutsche Rückmeldungen:
+  - Erfolg: `.success` mit Grün (`#9cffb0`).
+  - Fehler: `.error` mit Rot (`#ff7a7a`).
+- Fehlertexte sind konkret (was fehlt/was ist falsch, wie korrigieren).
+
+## Styling & Theme
+- Eingebettetes CSS in `index.html`, stationenspezifische Inline-Styles erlaubt.
+- Dunkles Theme mit CSS-Variablen in `:root` (Beispiel-Farben):
+  - Hintergrund: `#0d0d0d`
   - Text: `#e6e6e6`
-  - Card background: `#151522`
-  - Border: `#2b2b3d`
-- All navigation buttons use the `.btn` class with:
-  - Purple background: `#4b0082`
-  - Hover state: `#6a0dad`
-- Disabled buttons use:
-  - Background: `#2b2b3d`
-  - Text color: `#666`
-  - Opacity: `0.5`
-  - Cursor: `not-allowed`
-- Button order convention: back button first (left), then continue button (right)
-- Use CSS custom properties in `:root` for theme colors
-- Maintain consistent spacing and border-radius values
+  - Kartenhintergrund: `#151522`
+  - Rahmen: `#2b2b3d`
+- Buttons `.btn`:
+  - Primär: `#4b0082`
+  - Hover: `#6a0dad`
+  - Disabled: Hintergrund `#2b2b3d`, Text `#666`, `opacity: 0.5`, `cursor: not-allowed`.
 
-### Navigation & User Flow
-- Continue buttons should not auto-navigate; users control navigation manually by clicking the enabled continue button
-- Station progression requires completing the previous station
-- Always disable continue buttons initially and enable them only after task completion
-- Back buttons should navigate to the previous station
-- Use `sessionStorage` to track completion status, never modify without validation
+## Inhalte & Sprache
+- Deutsch als Standard, kurze Sätze, positive Tonalität.
+- Einheitliche Begriffe: „Station", „Aufgabe", „Weiter", „Zurück", „Hinweis".
+- Konsistente Überschriften (H1 für Seitentitel, H2/H3 für Abschnitte).
+- Narrativ: Kurze Einleitung je Station (Story/Setting), dann klare Aufgabe, danach Feedback/Weiter.
 
-### Form Handling
-- Use proper `<form>` elements with `autocomplete="off"` for quiz/riddle inputs
-- Prevent default form submission with `e.preventDefault()`
-- Provide clear, friendly feedback messages in German
-- Use `.success` class for positive feedback (green text: `#9cffb0`)
-- Use `.error` class for negative feedback (red text: `#ff7a7a`)
+## Qualitätssicherung (Empfohlen)
+- Testfälle pro Station: gültige/ungültige Eingaben.
+- Zugänglichkeit prüfen (ARIA, Fokus, Tastaturbedienung).
+- Performance: Vermeide unnötige DOM-Updates, kompaktes CSS.
+- Sicherheit: Eingaben immer validieren/säubern; keine sensiblen Daten speichern.
 
-### Content & Language
-- All user-facing content must be in German
-- Use emotive, magical-themed language consistent with the existing style
-- Maintain the playful, personalized tone
-
-## Testing & Validation
-
-### Manual Testing
-- Test all navigation flows between stations
-- Verify `sessionStorage` persistence across page refreshes
-- Test date/time-based unlocking functionality
-- Verify responsive design on different screen sizes
-- Test all form validation and user input handling
-- Check accessibility features (keyboard navigation, screen reader support)
-
-### Browser Compatibility
-- Target modern browsers (Chrome, Firefox, Safari, Edge)
-- Use standard ES6+ features (no polyfills needed)
-- Test `sessionStorage` availability
-
-## Common Patterns
-
-### Adding a New Station
-1. Create `stations/station{N}.html` with the card structure
-2. Add corresponding `initStation{N}()` function in `js/quest.js`
-3. Set up navigation buttons with proper IDs
-4. Implement station-specific logic (riddles, puzzles, etc.)
-5. Update `sessionStorage` on completion
-6. Ensure back/continue button handlers are configured
-
-### Station HTML Template
-Note: Replace placeholders with actual values:
-- `{N}` = file number (e.g., 1 for station1.html)
-- `{X}` = display number shown to users (e.g., 1 for station1.html, which is "Station 1")
-- For station1.html: `continueBtn1`, heading "Station 1", button text "Weiter zu Station 2"
-
-```html
-<div class="card">
-    <h1 style="text-align: center;">✨ Station {X} – Title</h1>
-    <p class="note">Station content...</p>
-    
-    <!-- Station-specific elements -->
-    
-    <button id="backBtn" class="btn">⬅️ Zurück zur vorherigen Station</button>
-    <button id="continueBtn{N}" class="btn" disabled>➡️ Weiter zu Station {X+1}</button>
-</div>
+## Verzeichnisvorschlag
+```
+.
+├─ index.html              # Einstieg, Theme, globale Styles
+├─ js/
+│  └─ quest.js             # Fortschritt, Navigation, Validierung
+├─ stations/
+│  ├─ station0.html        # Start/Countdown
+│  ├─ station1.html        # Aufgabe 1
+│  └─ station2.html        # Aufgabe 2 (usw.)
+└─ docs/                   # Redaktionelle Hilfen (optional)
+   ├─ content-guide.md
+   └─ station-checklist.md
 ```
 
-### Station Init Function Pattern
-Note: Replace `{N}` with actual numbers (e.g., `initStation1()` for station1.html)
-
-```javascript
-function initStation{N}() {
-    const backBtn = document.getElementById('backBtn');
-    const continueBtn = document.getElementById('continueBtn{N}');
-    
-    // Station-specific logic
-    
-    backBtn.addEventListener('click', () => {
-        loadStation({N-1});
-    });
-    
-    continueBtn.addEventListener('click', () => {
-        sessionStorage.setItem('station{N}Completed', 'true');
-        loadStation({N+1});
-    });
-}
-```
-
-## Important Constraints
-
-- **No external dependencies**: Keep the project dependency-free
-- **No build process**: All code must run directly in the browser
-- **Preserve personalization**: This is a birthday gift; maintain the personal touches and references
-- **German language**: All content additions should be in German
-- **Dark theme**: Never introduce light theme elements
-- **Session storage only**: Don't implement server-side storage or cookies
-
-## File Structure
-
-```
-Birthday-Quest/
-├── index.html           # Main entry point with styles
-├── CNAME               # GitHub Pages domain configuration
-├── station2.html       # Legacy file (kept for compatibility)
-├── js/
-│   └── quest.js        # Main quest logic and station management
-└── stations/
-    ├── station0.html   # Start/countdown page
-    ├── station1.html   # First challenge
-    ├── station2.html   # Second challenge
-    ├── station3.html   # Third challenge
-    └── station4.html   # Fourth challenge
-```
-
-## Pull Request Guidelines
-
-- Keep changes minimal and focused
-- Test all changes manually in a browser
-- Preserve the existing visual design and theme
-- Ensure backward compatibility with saved progress
-- Update this file if adding new patterns or conventions
+## Redaktions-Checkliste (Kurz)
+- Ziel der Station in 1–2 Sätzen.
+- Eindeutige Eingabeaufforderung + Beispiel.
+- Erfolgstext motivierend; Fehlertext hilfreich.
+- Button-Logik geprüft (Weiter erst nach Erfolg).
+- Einheiten/Schreibweisen konsistent (z. B. Datum, Groß-/Kleinschreibung).
