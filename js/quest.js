@@ -311,7 +311,7 @@ function initStation2() {
             const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
             
             feedback.className = 'error';
-            feedback.textContent = `${randomMessage}\n\n⏳ Du musst ${COOLDOWN_SECONDS} Sekunden warten, bevor du es erneut versuchen kannst...`;
+            feedback.innerHTML = `${randomMessage}<br><br>⏳ Du musst ${COOLDOWN_SECONDS} Sekunden warten, bevor du es erneut versuchen kannst...`;
             
             // Disable submit button
             submitBtn.disabled = true;
@@ -320,7 +320,7 @@ function initStation2() {
             countdownInterval = setInterval(() => {
                 timeLeft--;
                 if (timeLeft > 0) {
-                    feedback.textContent = `${randomMessage}\n\n⏳ Noch ${timeLeft} Sekunden warten...`;
+                    feedback.innerHTML = `${randomMessage}<br><br>⏳ Noch ${timeLeft} Sekunden warten...`;
                 } else {
                     clearInterval(countdownInterval);
                     countdownInterval = null;
