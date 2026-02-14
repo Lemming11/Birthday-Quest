@@ -1,11 +1,56 @@
 <div class="card">
-    <h1 style="text-align: center;">🏆 Station 4 – [Titel folgt]</h1>
+    <h1 style="text-align: center;">🍃 Station 4 – Die Grüne Drachenschenke</h1>
     <p class="note">
-        Hier wird bald eine spannende Aufgabe erscheinen...
+        Nach deinem aufregenden Abenteuer im „Buch der Abenteuer" schließt sich das Buch mit einem leisen <em>Klapp</em>, und du findest dich zurück in der Bibliothek. Doch das Abenteuer hat dich hungrig gemacht!
+    </p>
+    
+    <p class="note">
+        Du verlässt die Bibliothek und entdeckst gleich um die Ecke ein gemütliches Gasthaus mit einem handgemalten Schild: <strong>„Die Grüne Drachenschenke"</strong>. Der Duft von frischen Kräutern und exotischen Gewürzen zieht dich magisch an.
     </p>
 
-    <p>Diese Station ist noch in Entwicklung. Für jetzt kannst du einfach fortfahren.</p>
+    <div style="background: rgba(75, 0, 130, 0.2); padding: 1rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #9cffb0;">
+        <p style="font-style: italic; margin: 0;">
+            <strong>🐉 Die Wirtin:</strong> „Willkommen, werte Abenteurerin! Wir führen nur die feinsten veganen Köstlichkeiten aus allen Ländern. Unsere Spezialität heute ist ein Gericht, das schon vielen erschöpften Helden neue Kraft gegeben hat..."
+        </p>
+    </div>
+
+    <p class="note" style="margin-top: 1.5rem;">
+        Die Wirtin reicht dir eine Speisekarte. Auf der Rückseite findest du ein Rätsel:
+    </p>
+
+    <div style="background: rgba(43, 43, 61, 0.6); padding: 1.2rem; border-radius: 8px; margin: 1.5rem 0; border: 1px solid #2b2b3d;">
+        <p style="font-style: italic; margin: 0 0 1rem 0; color: #9cffb0;">
+            📜 <strong>Das Rätsel der Wirtin:</strong>
+        </p>
+        <p style="margin: 0.5rem 0; line-height: 1.6;">
+            „Von Erbsen grün, mit Minze frisch,<br>
+            Der Held, der müde, sucht den Tisch.<br>
+            Eins ist die Zahl, die dich hier führt,<br>
+            Wo dieses Gericht den Gaumen berührt.<br>
+            <br>
+            Auf welchem <strong>Platz der Speisekarte</strong> steht unser berühmtestes veganes Gericht – die legendäre <strong>‚Erbsen-Minz-Suppe der Erholung'</strong>?"
+        </p>
+    </div>
+
+    <form id="menuForm" autocomplete="off">
+        <label for="menuInput" style="display: block; margin-bottom: 0.8rem; font-weight: bold;">Gib die Nummer/Position ein:</label>
+        <input 
+            type="text" 
+            id="menuInput" 
+            name="menuPosition" 
+            placeholder="Welcher Platz auf der Karte?"
+            required
+            style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a2e; border: 1px solid #2b2b3d; border-radius: 4px; color: #e6e6e6; font-size: 1rem;"
+        >
+        
+        <button id="submitBtn4" class="btn" type="submit">Antwort prüfen</button>
+        <div id="feedback4" class="error" role="status" aria-live="polite"></div>
+    </form>
+
+    <div id="hintSection4" class="hidden" style="margin-top: 1.5rem; padding: 1rem; background: rgba(156, 255, 176, 0.1); border: 1px solid #9cffb0; border-radius: 4px;">
+        <p style="margin: 0;" class="success">💡 <strong>Vierter Hinweis:</strong> 1</p>
+    </div>
 
     <button id="backBtn4" class="btn">⬅️ Zurück zu Station 3</button>
-    <button id="continueBtn4" class="btn">➡️ Weiter zu Station 5</button>
+    <button id="continueBtn4" class="btn" disabled>➡️ Weiter zu Station 5</button>
 </div>
