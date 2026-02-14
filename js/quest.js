@@ -1,7 +1,7 @@
 // Quest Management System
 // Verwaltet alle Stationen und den Fortschritt
 
-const UNLOCK_DATE = new Date(2026, 1, 17, 0, 0, 0); // Datum
+const UNLOCK_DATE = new Date(2026, 1, 07, 0, 0, 0); // Datum
 
 // Aktueller Quest-Zustand
 let currentStation = 0;
@@ -1013,6 +1013,15 @@ function initStation6() {
                 feedback.className = 'error';
             }
         });
+    }
+    
+    // Check if station is already completed
+    if (sessionStorage.getItem('station6Completed') === 'true') {
+        if (continueBtn) continueBtn.disabled = false;
+        if (hintSection) hintSection.classList.remove('hidden');
+        feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast die richtige Antwort gefunden!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
+        feedback.className = 'success';
+        if (submitBtn) submitBtn.disabled = true;
     }
     
     if (continueBtn) {
