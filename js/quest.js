@@ -928,9 +928,124 @@ function initStation5() {
     }
 }
 
-// Station 6: Platzhalter
+// Station 6: Stromberg Quiz
 function initStation6() {
+    const form = document.getElementById('strombergForm');
+    const submitBtn = document.getElementById('submitBtn6');
+    const feedback = document.getElementById('feedback6');
+    const continueBtn = document.getElementById('continueBtn6');
     const backBtn = document.getElementById('backBtn6');
+    const hintSection = document.getElementById('hintSection6');
+    const answerOptionsContainer = document.getElementById('answerOptions');
+    
+    // Define answer options with correct/incorrect flags
+    const options = [
+        { id: 'blumenladen', text: 'Blumenladen', correct: false },
+        { id: 'schadensregulierung', text: 'Schadensregulierung', correct: true },
+        { id: 'eiskunstlauf', text: 'Eiskunstlauf', correct: false },
+        { id: 'parkplatz', text: 'Parkplatz', correct: true },
+        { id: 'ki', text: 'Künstliche Intelligenz', correct: false }
+    ];
+    
+    // Shuffle options randomly
+    const shuffledOptions = [...options].sort(() => Math.random() - 0.5);
+    
+    // Create checkbox options in random order
+    if (answerOptionsContainer) {
+        shuffledOptions.forEach(option => {
+            const label = document.createElement('label');
+            label.style.cssText = 'display: flex; align-items: center; cursor: pointer; padding: 0.4rem;';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'strombergAnswer';
+            checkbox.value = option.id;
+            checkbox.style.marginRight = '0.8rem';
+            
+            const span = document.createElement('span');
+            span.textContent = option.text;
+            
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            answerOptionsContainer.appendChild(label);
+        });
+    }
+    
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            const selectedAnswers = formData.getAll('strombergAnswer');
+            
+            // Check if at least one answer is selected
+            if (selectedAnswers.length === 0) {
+                feedback.innerHTML = '❌ Bitte wähle mindestens eine Antwort aus!';
+                feedback.className = 'error';
+                return;
+            }
+            
+            // Check if exactly the correct answers are selected
+            const correctAnswers = options.filter(opt => opt.correct).map(opt => opt.id);
+            const isCorrect = selectedAnswers.length === correctAnswers.length &&
+                            selectedAnswers.every(answer => correctAnswers.includes(answer));
+            
+            if (isCorrect) {
+                feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast die richtige Antwort gefunden!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
+                feedback.className = 'success';
+                
+                if (hintSection) {
+                    hintSection.classList.remove('hidden');
+                }
+                if (continueBtn) {
+                    continueBtn.disabled = false;
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+                
+                // Mark station as completed
+                sessionStorage.setItem('station6Completed', 'true');
+            } else {
+                feedback.innerHTML = '❌ Nicht ganz richtig! Erinnere dich an die gemeinsamen Abende mit Stromberg...<br>Versuche es noch einmal!';
+                feedback.className = 'error';
+            }
+        });
+    }
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Final station - show completion message
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="card" style="text-align: center;">
+                    <h1>🎉 Herzlichen Glückwunsch! 🎉</h1>
+                    <p class="success" style="font-size: 1.2rem; margin: 2rem 0;">
+                        Du hast alle Stationen der Birthday-Quest erfolgreich gemeistert!
+                    </p>
+                    <p class="note" style="margin: 1.5rem 0;">
+                        Die gesammelten Hinweise führen dich nun zu deinem Geschenk...
+                    </p>
+                    <div style="background: rgba(75, 0, 130, 0.3); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+                        <p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">💡 Deine Hinweise:</p>
+                        <p style="line-height: 2;">
+                            1️⃣ Universität<br>
+                            2️⃣ Bibliothek<br>
+                            3️⃣ Dauerschließfach<br>
+                            4️⃣ 1<br>
+                            5️⃣ 9<br>
+                            6️⃣ 2
+                        </p>
+                    </div>
+                    <p class="note" style="font-style: italic; color: #9cffb0;">
+                        Kombiniere die Hinweise und finde dein Geschenk! ✨
+                    </p>
+                    <button onclick="loadStation(0)" class="btn">🏠 Zurück zum Start</button>
+                </div>
+            `;
+        });
+    }
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
