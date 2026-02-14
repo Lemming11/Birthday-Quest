@@ -1015,6 +1015,15 @@ function initStation6() {
         });
     }
     
+    // Check if station is already completed
+    if (sessionStorage.getItem('station6Completed') === 'true') {
+        if (continueBtn) continueBtn.disabled = false;
+        if (hintSection) hintSection.classList.remove('hidden');
+        feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast die richtige Antwort gefunden!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
+        feedback.className = 'success';
+        if (submitBtn) submitBtn.disabled = true;
+    }
+    
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
