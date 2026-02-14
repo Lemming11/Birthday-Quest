@@ -203,20 +203,18 @@ function initStation2() {
     const resetBtn = document.getElementById('resetBtn');
     const feedback = document.getElementById('nonogram-feedback');
     
-    // Heart pattern (11x11 grid)
+    // Heart pattern (9x9 grid)
     // 1 = filled, 0 = empty
     const solution = [
-        [0, 0, 1, 1, 0, 0, 0, 1, 1, 0, 0],
-        [0, 1, 1, 1, 1, 0, 1, 1, 1, 1, 0],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-        [0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-        [0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0],
-        [0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0]
+        [0, 1, 1, 0, 0, 0, 1, 1, 0],
+        [1, 1, 1, 1, 0, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [1, 1, 1, 1, 1, 1, 1, 1, 1],
+        [0, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 0, 1, 1, 1, 1, 1, 0, 0],
+        [0, 0, 0, 1, 1, 1, 0, 0, 0],
+        [0, 0, 0, 0, 1, 0, 0, 0, 0],
+        [0, 0, 0, 0, 0, 0, 0, 0, 0]
     ];
     
     // Calculate row and column clues
@@ -274,6 +272,18 @@ function initStation2() {
         const container = document.getElementById('nonogram-grid');
         container.innerHTML = '';
         
+        // Calculate responsive cell size based on viewport
+        const viewportWidth = window.innerWidth;
+        const cardPadding = 32; // Approximate padding from .card (16px each side)
+        const availableWidth = Math.min(viewportWidth - cardPadding, 600); // Max 600px for larger screens
+        
+        // Calculate cell size to fit the grid
+        // Formula: (availableWidth - rowClueWidth - borders) / cols
+        const rowClueWidth = viewportWidth < 400 ? 30 : 40;
+        const borderSpace = (cols + 2) * 2; // Approximate border space
+        const cellSize = Math.floor((availableWidth - rowClueWidth - borderSpace) / cols);
+        const actualCellSize = Math.max(20, Math.min(cellSize, 30)); // Between 20px and 30px
+        
         const table = document.createElement('table');
         table.style.margin = '20px auto';
         table.style.borderCollapse = 'collapse';
@@ -291,14 +301,14 @@ function initStation2() {
         for (let c = 0; c < cols; c++) {
             const th = document.createElement('td');
             th.textContent = colClues[c].join(' ');
-            th.style.padding = '4px';
+            th.style.padding = '2px';
             th.style.textAlign = 'center';
             th.style.fontWeight = 'bold';
             th.style.background = '#2b2b3d';
             th.style.color = '#d4c5ff';
             th.style.border = '1px solid #666';
-            th.style.minWidth = '30px';
-            th.style.fontSize = '0.8em';
+            th.style.width = actualCellSize + 'px';
+            th.style.fontSize = viewportWidth < 400 ? '0.7em' : '0.8em';
             headerRow.appendChild(th);
         }
         table.appendChild(headerRow);
@@ -310,21 +320,21 @@ function initStation2() {
             // Row clue
             const rowClueCell = document.createElement('td');
             rowClueCell.textContent = rowClues[r].join(' ');
-            rowClueCell.style.padding = '4px';
+            rowClueCell.style.padding = '2px';
             rowClueCell.style.textAlign = 'right';
             rowClueCell.style.fontWeight = 'bold';
             rowClueCell.style.background = '#2b2b3d';
             rowClueCell.style.color = '#d4c5ff';
             rowClueCell.style.border = '1px solid #666';
-            rowClueCell.style.minWidth = '40px';
-            rowClueCell.style.fontSize = '0.8em';
+            rowClueCell.style.width = rowClueWidth + 'px';
+            rowClueCell.style.fontSize = viewportWidth < 400 ? '0.7em' : '0.8em';
             tr.appendChild(rowClueCell);
             
             // Grid cells
             for (let c = 0; c < cols; c++) {
                 const td = document.createElement('td');
-                td.style.width = '30px';
-                td.style.height = '30px';
+                td.style.width = actualCellSize + 'px';
+                td.style.height = actualCellSize + 'px';
                 td.style.border = '1px solid #666';
                 td.style.cursor = 'pointer';
                 td.style.transition = 'background 0.2s';
