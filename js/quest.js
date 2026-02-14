@@ -1,7 +1,7 @@
 // Quest Management System
 // Verwaltet alle Stationen und den Fortschritt
 
-const UNLOCK_DATE = new Date(2026, 1, 11, 18, 30, 0); // 2026-02-11 18:30:00
+const UNLOCK_DATE = new Date(2026, 1, 17, 0, 0, 0); // Datum
 
 // Aktueller Quest-Zustand
 let currentStation = 0;
