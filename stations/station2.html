@@ -1,11 +1,41 @@
 <div class="card">
-    <h1 style="text-align: center;">🎯 Station 2 – [Titel folgt]</h1>
+    <h1 style="text-align: center;">🧪 Station 2 – Der Zaubertrank</h1>
     <p class="note">
-        Hier wird bald eine spannende Aufgabe erscheinen...
+        Als frischgebackenes Mitglied von Ravenclaw kennst du den Wert von Wissen. Und genau das führt dich geradewegs in die altehrwürdige Bibliothek, wo du ein staubiges, ledergebundenes Buch entdeckst: <strong>„Das große Zaubertrankbuch"</strong>.
+    </p>
+    
+    <p class="note">
+        Darin findest du ein besonders wichtiges Rezept: den <strong>Wiederbelebungstrank</strong>. Für die kommenden Abenteuer könnte dieser Trank überlebenswichtig sein! Doch um ihn zu brauen, benötigst du die wichtigste Zutat...
     </p>
 
-    <p>Diese Station ist noch in Entwicklung. Für jetzt kannst du einfach fortfahren.</p>
+    <div style="text-align: center; margin: 1.5rem 0;">
+        <img src="../file(3).jpg" alt="Die geheimnisvolle Pflanze" style="max-width: 100%; height: auto; border-radius: 8px; border: 2px solid #2b2b3d;">
+        <p style="font-style: italic; margin-top: 0.5rem; font-size: 0.9em; color: #9cffb0;">Du erinnerst dich: Vor dieser Pflanze hast du schon einmal gestanden...</p>
+    </div>
+
+    <p class="note" style="font-weight: bold; color: #9cffb0;">
+        📜 Die Hauptzutat für den Wiederbelebungstrank ist die Wurzel der... ?
+    </p>
+
+    <form id="potionForm" autocomplete="off">
+        <label for="ingredientInput" style="display: block; margin-bottom: 0.8rem; font-weight: bold;">Gib die Zutat ein:</label>
+        <input 
+            type="text" 
+            id="ingredientInput" 
+            name="ingredient" 
+            placeholder="Die gesuchte Pflanze..."
+            required
+            style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; background: #1a1a2e; border: 1px solid #2b2b3d; border-radius: 4px; color: #e6e6e6; font-size: 1rem;"
+        >
+        
+        <button id="submitBtn" class="btn" type="submit">Antwort prüfen</button>
+        <div id="feedback" class="error" role="status" aria-live="polite"></div>
+    </form>
+
+    <div id="hintSection" class="hidden" style="margin-top: 1.5rem; padding: 1rem; background: rgba(156, 255, 176, 0.1); border: 1px solid #9cffb0; border-radius: 4px;">
+        <p style="margin: 0;" class="success">💡 <strong>Zweiter Hinweis:</strong> Bibliothek</p>
+    </div>
 
     <button id="backBtn2" class="btn">⬅️ Zurück zu Station 1</button>
-    <button id="continueBtn2" class="btn">➡️ Weiter zu Station 3</button>
+    <button id="continueBtn2" class="btn" disabled>➡️ Weiter zu Station 3</button>
 </div>
