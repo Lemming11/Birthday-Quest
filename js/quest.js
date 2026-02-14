@@ -936,49 +936,62 @@ function initStation6() {
     const continueBtn = document.getElementById('continueBtn6');
     const backBtn = document.getElementById('backBtn6');
     const hintSection = document.getElementById('hintSection6');
+    const answerOptionsContainer = document.getElementById('answerOptions');
     
-    // Correct answers: b, a, a, b, c
-    const correctAnswers = {
-        q1: 'b',  // Tanja
-        q2: 'a',  // Der Dicke
-        q3: 'a',  // Capitol Versicherung
-        q4: 'b',  // Er ist sehr tugendhaft
-        q5: 'c'   // Das A-Team
-    };
+    // Define answer options with correct/incorrect flags
+    const options = [
+        { id: 'blumenladen', text: 'Blumenladen', correct: false },
+        { id: 'schadensregulierung', text: 'Schadensregulierung', correct: true },
+        { id: 'eiskunstlauf', text: 'Eiskunstlauf', correct: false },
+        { id: 'parkplatz', text: 'Parkplatz', correct: true },
+        { id: 'ki', text: 'Künstliche Intelligenz', correct: false }
+    ];
+    
+    // Shuffle options randomly
+    const shuffledOptions = [...options].sort(() => Math.random() - 0.5);
+    
+    // Create checkbox options in random order
+    if (answerOptionsContainer) {
+        shuffledOptions.forEach(option => {
+            const label = document.createElement('label');
+            label.style.cssText = 'display: flex; align-items: center; cursor: pointer; padding: 0.4rem;';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'strombergAnswer';
+            checkbox.value = option.id;
+            checkbox.style.marginRight = '0.8rem';
+            
+            const span = document.createElement('span');
+            span.textContent = option.text;
+            
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            answerOptionsContainer.appendChild(label);
+        });
+    }
     
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
             const formData = new FormData(form);
-            let allCorrect = true;
-            let answeredAll = true;
+            const selectedAnswers = formData.getAll('strombergAnswer');
             
-            // Check if all questions are answered
-            for (let i = 1; i <= 5; i++) {
-                if (!formData.get(`q${i}`)) {
-                    answeredAll = false;
-                    break;
-                }
-            }
-            
-            if (!answeredAll) {
-                feedback.innerHTML = '❌ Bitte beantworte alle Fragen!';
+            // Check if at least one answer is selected
+            if (selectedAnswers.length === 0) {
+                feedback.innerHTML = '❌ Bitte wähle mindestens eine Antwort aus!';
                 feedback.className = 'error';
                 return;
             }
             
-            // Check answers
-            for (let i = 1; i <= 5; i++) {
-                const userAnswer = formData.get(`q${i}`);
-                if (userAnswer !== correctAnswers[`q${i}`]) {
-                    allCorrect = false;
-                    break;
-                }
-            }
+            // Check if exactly the correct answers are selected
+            const correctAnswers = options.filter(opt => opt.correct).map(opt => opt.id);
+            const isCorrect = selectedAnswers.length === correctAnswers.length &&
+                            selectedAnswers.every(answer => correctAnswers.includes(answer));
             
-            if (allCorrect) {
-                feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast alle Fragen richtig beantwortet!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
+            if (isCorrect) {
+                feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast die richtige Antwort gefunden!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
                 feedback.className = 'success';
                 
                 if (hintSection) {
