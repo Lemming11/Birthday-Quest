@@ -242,23 +242,117 @@ function initStation1() {
     }
 }
 
-// Station 2: Platzhalter
+// Station 2: Der Zaubertrank
 function initStation2() {
-    const continueBtn = document.getElementById('continueBtn2');
-    const backBtn = document.getElementById('backBtn2');
+    const correctAnswers = ['alraune', 'alraunen']; // Singular und Plural
+    const COOLDOWN_SECONDS = 10;
+    let cooldownActive = false;
+    let countdownInterval = null;
     
-    if (continueBtn) {
-        continueBtn.addEventListener('click', (e) => {
-            e.preventDefault();
+    const form = document.getElementById('potionForm');
+    const submitBtn = document.getElementById('submitBtn');
+    const feedback = document.getElementById('feedback');
+    const ingredientInput = document.getElementById('ingredientInput');
+    const hintSection = document.getElementById('hintSection');
+    const backBtn = document.getElementById('backBtn2');
+    const continueBtn = document.getElementById('continueBtn2');
+    
+    const funnyMessages = [
+        "🌿 'Petersilie? Ernsthaft? Das ist ein Küchenkraut, kein magischer Trank-Bestandteil!'",
+        "🍄 'Nein, nein, nein! Diese Pflanze würde den Trank eher explodieren lassen als wiederbeleben!'",
+        "🧙 Der Buchgeist seufzt: 'Hast du überhaupt das Bild angeschaut? Versuch es nochmal!'",
+        "📖 'Falsch! Tipp: Die gesuchte Pflanze hat einen ziemlich... schreienden Ruf.'",
+        "⚗️ 'Das kann nicht sein! Schau dir das Foto nochmal genau an. Du warst doch schon dort!'"
+    ];
+    
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        if (cooldownActive) {
+            return;
+        }
+        
+        const userAnswer = ingredientInput.value.trim().toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        
+        if (!userAnswer) {
+            feedback.className = 'error';
+            feedback.textContent = "Bitte gib eine Antwort ein!";
+            return;
+        }
+        
+        // Prüfe ob die Antwort korrekt ist
+        if (correctAnswers.includes(userAnswer)) {
+            // Clear any existing countdown
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
+            feedback.className = 'success';
+            feedback.textContent = "🎉 Richtig! Die Alraune! Ihre Wurzel ist tatsächlich die Hauptzutat für den Wiederbelebungstrank. Du notierst dir das Rezept sorgfältig – man weiß ja nie, wann man es brauchen könnte...";
             sessionStorage.setItem('station2Completed', 'true');
-            loadStation(3);
-        });
-    }
+            
+            // Show hint section
+            if (hintSection) {
+                hintSection.classList.remove('hidden');
+            }
+            
+            // Enable continue button
+            if (continueBtn) {
+                continueBtn.disabled = false;
+            }
+            
+            // Disable form
+            submitBtn.disabled = true;
+            ingredientInput.disabled = true;
+        } else {
+            // Wrong answer - activate cooldown
+            cooldownActive = true;
+            const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            
+            feedback.className = 'error';
+            feedback.textContent = `${randomMessage}\n\n⏳ Du musst ${COOLDOWN_SECONDS} Sekunden warten, bevor du es erneut versuchen kannst...`;
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            
+            let timeLeft = COOLDOWN_SECONDS;
+            countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    feedback.textContent = `${randomMessage}\n\n⏳ Noch ${timeLeft} Sekunden warten...`;
+                } else {
+                    clearInterval(countdownInterval);
+                    countdownInterval = null;
+                    cooldownActive = false;
+                    submitBtn.disabled = false;
+                    feedback.textContent = "Du kannst es jetzt erneut versuchen!";
+                    feedback.className = '';
+                }
+            }, 1000);
+        }
+    });
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(1);
+        });
+    }
+    
+    if (continueBtn) {
+        // Check if station is already completed
+        const completed = sessionStorage.getItem('station2Completed');
+        if (completed === 'true') {
+            continueBtn.disabled = false;
+            if (hintSection) {
+                hintSection.classList.remove('hidden');
+            }
+        }
+        
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(3);
         });
     }
 }
