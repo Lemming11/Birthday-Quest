@@ -964,6 +964,7 @@ function initStation6() {
                 }
                 if (selectedAnswer.value !== correctAnswers[question]) {
                     allCorrect = false;
+                    break;
                 }
             }
             
