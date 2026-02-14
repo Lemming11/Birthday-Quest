@@ -930,71 +930,87 @@ function initStation5() {
     }
 }
 
-// Station 6: Platzhalter
+// Station 6: Stromberg Quiz
 function initStation6() {
-    const form = document.getElementById('strombergQuiz');
-    const submitBtn = document.getElementById('submitQuiz');
-    const feedback = document.getElementById('quizFeedback');
-    const hintSection = document.getElementById('hintSection6');
+    const form = document.getElementById('strombergForm');
+    const submitBtn = document.getElementById('submitBtn6');
+    const feedback = document.getElementById('feedback6');
     const continueBtn = document.getElementById('continueBtn6');
     const backBtn = document.getElementById('backBtn6');
+    const hintSection = document.getElementById('hintSection6');
+    const answerOptionsContainer = document.getElementById('answerOptions');
     
-    // Richtige Antworten
-    const correctAnswers = {
-        q1: 'd', // Pia Steinmann
-        q2: 'b', // Schadensregulierung
-        q3: 'b', // Ernie Heisterkamp
-        q4: 'a', // Der Ekelbert
-        q5: 'c'  // Der Fisch stinkt vom Kopf her (nicht aus Staffel 1)
-    };
+    // Define answer options with correct/incorrect flags
+    const options = [
+        { id: 'blumenladen', text: 'Blumenladen', correct: false },
+        { id: 'schadensregulierung', text: 'Schadensregulierung', correct: true },
+        { id: 'eiskunstlauf', text: 'Eiskunstlauf', correct: false },
+        { id: 'parkplatz', text: 'Parkplatz', correct: true },
+        { id: 'ki', text: 'Künstliche Intelligenz', correct: false }
+    ];
+    
+    // Shuffle options randomly
+    const shuffledOptions = [...options].sort(() => Math.random() - 0.5);
+    
+    // Create checkbox options in random order
+    if (answerOptionsContainer) {
+        shuffledOptions.forEach(option => {
+            const label = document.createElement('label');
+            label.style.cssText = 'display: flex; align-items: center; cursor: pointer; padding: 0.4rem;';
+            
+            const checkbox = document.createElement('input');
+            checkbox.type = 'checkbox';
+            checkbox.name = 'strombergAnswer';
+            checkbox.value = option.id;
+            checkbox.style.marginRight = '0.8rem';
+            
+            const span = document.createElement('span');
+            span.textContent = option.text;
+            
+            label.appendChild(checkbox);
+            label.appendChild(span);
+            answerOptionsContainer.appendChild(label);
+        });
+    }
     
     if (form) {
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             
-            let allCorrect = true;
-            let unanswered = false;
+            const formData = new FormData(form);
+            const selectedAnswers = formData.getAll('strombergAnswer');
             
-            // Prüfe alle Antworten
-            for (let question in correctAnswers) {
-                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
-                if (!selectedAnswer) {
-                    unanswered = true;
-                    break;
-                }
-                if (selectedAnswer.value !== correctAnswers[question]) {
-                    allCorrect = false;
-                    break;
-                }
-            }
-            
-            if (unanswered) {
+            // Check if at least one answer is selected
+            if (selectedAnswers.length === 0) {
+                feedback.innerHTML = '❌ Bitte wähle mindestens eine Antwort aus!';
                 feedback.className = 'error';
-                feedback.innerHTML = '❌ Bitte beantworte alle Fragen!';
                 return;
             }
             
-            if (allCorrect) {
+            // Check if exactly the correct answers are selected
+            const correctAnswers = options.filter(opt => opt.correct).map(opt => opt.id);
+            const isCorrect = selectedAnswers.length === correctAnswers.length &&
+                            selectedAnswers.every(answer => correctAnswers.includes(answer));
+            
+            if (isCorrect) {
+                feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast die richtige Antwort gefunden!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
                 feedback.className = 'success';
-                feedback.innerHTML = '🎉 Perfekt! Du kennst Stromberg wirklich gut!<br>Die Serie, die ihr zu zweit geschaut habt...';
                 
                 if (hintSection) {
                     hintSection.classList.remove('hidden');
                 }
-                
                 if (continueBtn) {
                     continueBtn.disabled = false;
                 }
-                
-                // Markiere Station 6 als abgeschlossen
-                sessionStorage.setItem('station6Completed', 'true');
-                
                 if (submitBtn) {
                     submitBtn.disabled = true;
                 }
+                
+                // Mark station as completed
+                sessionStorage.setItem('station6Completed', 'true');
             } else {
+                feedback.innerHTML = '❌ Nicht ganz richtig! Erinnere dich an die gemeinsamen Abende mit Stromberg...<br>Versuche es noch einmal!';
                 feedback.className = 'error';
-                feedback.innerHTML = '❌ Nicht alle Antworten sind richtig. Versuch es nochmal!';
             }
         });
     }
