@@ -59,6 +59,8 @@ async function loadStation(stationNumber) {
                     initStation5();
                 } else if (stationNumber === 6) {
                     initStation6();
+                } else if (stationNumber === 7) {
+                    initStation7();
                 }
             } catch (error) {
                 content.innerHTML = '<h1>❌ Fehler</h1><p>Diese Station existiert noch nicht.</p>';
@@ -1016,34 +1018,7 @@ function initStation6() {
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            // Final station - show completion message
-            const content = document.getElementById('content');
-            content.innerHTML = `
-                <div class="card" style="text-align: center;">
-                    <h1>🎉 Herzlichen Glückwunsch! 🎉</h1>
-                    <p class="success" style="font-size: 1.2rem; margin: 2rem 0;">
-                        Du hast alle Stationen der Birthday-Quest erfolgreich gemeistert!
-                    </p>
-                    <p class="note" style="margin: 1.5rem 0;">
-                        Die gesammelten Hinweise führen dich nun zu deinem Geschenk...
-                    </p>
-                    <div style="background: rgba(75, 0, 130, 0.3); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
-                        <p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">💡 Deine Hinweise:</p>
-                        <p style="line-height: 2;">
-                            1️⃣ Universität<br>
-                            2️⃣ Bibliothek<br>
-                            3️⃣ Dauerschließfach<br>
-                            4️⃣ 1<br>
-                            5️⃣ 9<br>
-                            6️⃣ 2
-                        </p>
-                    </div>
-                    <p class="note" style="font-style: italic; color: #9cffb0;">
-                        Kombiniere die Hinweise und finde dein Geschenk! ✨
-                    </p>
-                    <button onclick="loadStation(0)" class="btn">🏠 Zurück zum Start</button>
-                </div>
-            `;
+            loadStation(7);
         });
     }
     
@@ -1051,6 +1026,18 @@ function initStation6() {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(5);
+        });
+    }
+}
+
+// Station 7: Abschlussseite
+function initStation7() {
+    const backBtn = document.getElementById('backBtn7');
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(6);
         });
     }
 }
