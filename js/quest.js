@@ -59,6 +59,8 @@ async function loadStation(stationNumber) {
                     initStation5();
                 } else if (stationNumber === 6) {
                     initStation6();
+                } else if (stationNumber === 7) {
+                    initStation7();
                 }
             } catch (error) {
                 content.innerHTML = '<h1>❌ Fehler</h1><p>Diese Station existiert noch nicht.</p>';
@@ -930,12 +932,95 @@ function initStation5() {
 
 // Station 6: Platzhalter
 function initStation6() {
+    const form = document.getElementById('strombergQuiz');
+    const submitBtn = document.getElementById('submitQuiz');
+    const feedback = document.getElementById('quizFeedback');
+    const hintSection = document.getElementById('hintSection6');
+    const continueBtn = document.getElementById('continueBtn6');
     const backBtn = document.getElementById('backBtn6');
+    
+    // Richtige Antworten
+    const correctAnswers = {
+        q1: 'd', // Pia Steinmann
+        q2: 'b', // Schadensregulierung
+        q3: 'b', // Ernie Heisterkamp
+        q4: 'a', // Der Ekelbert
+        q5: 'c'  // Der Fisch stinkt vom Kopf her (nicht aus Staffel 1)
+    };
+    
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            let allCorrect = true;
+            let unanswered = false;
+            
+            // Prüfe alle Antworten
+            for (let question in correctAnswers) {
+                const selectedAnswer = document.querySelector(`input[name="${question}"]:checked`);
+                if (!selectedAnswer) {
+                    unanswered = true;
+                    break;
+                }
+                if (selectedAnswer.value !== correctAnswers[question]) {
+                    allCorrect = false;
+                }
+            }
+            
+            if (unanswered) {
+                feedback.className = 'error';
+                feedback.innerHTML = '❌ Bitte beantworte alle Fragen!';
+                return;
+            }
+            
+            if (allCorrect) {
+                feedback.className = 'success';
+                feedback.innerHTML = '🎉 Perfekt! Du kennst Stromberg wirklich gut!<br>Die Serie, die ihr zu zweit geschaut habt...';
+                
+                if (hintSection) {
+                    hintSection.classList.remove('hidden');
+                }
+                
+                if (continueBtn) {
+                    continueBtn.disabled = false;
+                }
+                
+                // Markiere Station 6 als abgeschlossen
+                sessionStorage.setItem('station6Completed', 'true');
+                
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+            } else {
+                feedback.className = 'error';
+                feedback.innerHTML = '❌ Nicht alle Antworten sind richtig. Versuch es nochmal!';
+            }
+        });
+    }
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(7);
+        });
+    }
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
             loadStation(5);
+        });
+    }
+}
+
+// Station 7: Abschlussseite
+function initStation7() {
+    const backBtn = document.getElementById('backBtn7');
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(6);
         });
     }
 }
