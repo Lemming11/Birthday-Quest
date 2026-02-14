@@ -539,10 +539,16 @@ function initStation4() {
             const answer = menuInput.value.trim().toLowerCase();
             
             // Correct answer is "1" (first position on the menu)
-            // Accept various formats: "1", "eins", "platz 1", "nummer 1", "position 1", etc.
-            const correctAnswers = ['1', 'eins', 'platz 1', 'nummer 1', 'position 1', 'erste', 'erster', 'der erste'];
+            // Accept various formats: "1", "eins", "erste", etc.
+            const isCorrect = answer === '1' || 
+                            answer === '1.' ||
+                            answer === 'eins' ||
+                            answer === 'erste' ||
+                            answer === 'erster' ||
+                            answer === 'der erste' ||
+                            /^(platz|nummer|position)\s*1\.?$/.test(answer);
             
-            if (correctAnswers.includes(answer) || answer === '1.' || /^(platz|nummer|position)?\s*1\.?$/.test(answer)) {
+            if (isCorrect) {
                 feedback.innerHTML = `<span class="success">✅ Richtig! Die „Erbsen-Minz-Suppe der Erholung" steht an <strong>erster Stelle</strong> auf der Speisekarte. Die Wirtin serviert dir eine dampfende Schüssel – köstlich und stärkend!</span>`;
                 feedback.className = 'success';
                 
