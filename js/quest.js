@@ -278,6 +278,8 @@ function initStation2() {
         table.style.margin = '20px auto';
         table.style.borderCollapse = 'collapse';
         table.style.background = '#f5f5f5';
+        table.style.maxWidth = '100%';
+        table.style.width = 'auto';
         
         // Header row with column clues
         const headerRow = document.createElement('tr');
@@ -289,13 +291,14 @@ function initStation2() {
         for (let c = 0; c < cols; c++) {
             const th = document.createElement('td');
             th.textContent = colClues[c].join(' ');
-            th.style.padding = '8px';
+            th.style.padding = '4px';
             th.style.textAlign = 'center';
             th.style.fontWeight = 'bold';
             th.style.background = '#2b2b3d';
             th.style.color = '#d4c5ff';
             th.style.border = '1px solid #666';
-            th.style.minWidth = '40px';
+            th.style.minWidth = '30px';
+            th.style.fontSize = '0.8em';
             headerRow.appendChild(th);
         }
         table.appendChild(headerRow);
@@ -307,20 +310,21 @@ function initStation2() {
             // Row clue
             const rowClueCell = document.createElement('td');
             rowClueCell.textContent = rowClues[r].join(' ');
-            rowClueCell.style.padding = '8px';
+            rowClueCell.style.padding = '4px';
             rowClueCell.style.textAlign = 'right';
             rowClueCell.style.fontWeight = 'bold';
             rowClueCell.style.background = '#2b2b3d';
             rowClueCell.style.color = '#d4c5ff';
             rowClueCell.style.border = '1px solid #666';
-            rowClueCell.style.minWidth = '60px';
+            rowClueCell.style.minWidth = '40px';
+            rowClueCell.style.fontSize = '0.8em';
             tr.appendChild(rowClueCell);
             
             // Grid cells
             for (let c = 0; c < cols; c++) {
                 const td = document.createElement('td');
-                td.style.width = '40px';
-                td.style.height = '40px';
+                td.style.width = '30px';
+                td.style.height = '30px';
                 td.style.border = '1px solid #666';
                 td.style.cursor = 'pointer';
                 td.style.transition = 'background 0.2s';
@@ -331,6 +335,16 @@ function initStation2() {
                 
                 // Mousedown to toggle cell or start dragging
                 td.addEventListener('mousedown', (e) => {
+                    if (puzzleSolved) return;
+                    e.preventDefault();
+                    isDragging = true;
+                    dragFillValue = userGrid[r][c] === 1 ? 0 : 1;
+                    userGrid[r][c] = dragFillValue;
+                    updateCellStyle(td, r, c);
+                });
+                
+                // Touch start to toggle cell or start dragging
+                td.addEventListener('touchstart', (e) => {
                     if (puzzleSolved) return;
                     e.preventDefault();
                     isDragging = true;
@@ -419,14 +433,50 @@ function initStation2() {
     // Initialize
     createGrid();
     
-    // Add global mouseup listener to stop dragging and check solution
-    document.addEventListener('mouseup', () => {
+    // Helper function to get cell from touch coordinates
+    function getCellFromTouch(touch) {
+        const element = document.elementFromPoint(touch.clientX, touch.clientY);
+        if (element && element.dataset.row !== undefined && element.dataset.col !== undefined) {
+            return element;
+        }
+        return null;
+    }
+    
+    // Add touchmove listener to the nonogram container for dragging across cells
+    const nonogramContainer = document.getElementById('nonogram-container');
+    if (nonogramContainer) {
+        nonogramContainer.addEventListener('touchmove', (e) => {
+            if (!isDragging || dragFillValue === null || puzzleSolved) return;
+            if (e.touches.length === 0) return; // Safety check for touch events
+            
+            // Only prevent default if we're actively dragging to avoid blocking page scroll
+            const touch = e.touches[0];
+            const cell = getCellFromTouch(touch);
+            
+            if (cell) {
+                e.preventDefault(); // Prevent scrolling only when over grid cells
+                const r = parseInt(cell.dataset.row);
+                const c = parseInt(cell.dataset.col);
+                if (userGrid[r][c] !== dragFillValue) {
+                    userGrid[r][c] = dragFillValue;
+                    updateCellStyle(cell, r, c);
+                }
+            }
+        }, { passive: false });
+    }
+    
+    // Helper function to end dragging and check solution
+    function endDragging() {
         if (isDragging) {
             isDragging = false;
             dragFillValue = null;
             checkSolution();
         }
-    });
+    }
+    
+    // Add global mouseup and touchend listeners to stop dragging and check solution
+    document.addEventListener('mouseup', endDragging);
+    document.addEventListener('touchend', endDragging);
     
     // Check if already completed
     const completed = sessionStorage.getItem('station2Completed');
