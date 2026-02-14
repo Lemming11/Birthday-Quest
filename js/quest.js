@@ -127,7 +127,9 @@ function initStation0(isUnlocked) {
 // Station 1: Der sprechende Hut
 function initStation1() {
     const correctHouse = 'ravenclaw';
+    const COOLDOWN_SECONDS = 10;
     let cooldownActive = false;
+    let countdownInterval = null;
     
     const form = document.getElementById('houseForm');
     const submitBtn = document.getElementById('submitBtn');
@@ -160,6 +162,12 @@ function initStation1() {
         }
         
         if (selectedHouse.value === correctHouse) {
+            // Clear any existing countdown
+            if (countdownInterval) {
+                clearInterval(countdownInterval);
+                countdownInterval = null;
+            }
+            
             feedback.className = 'success';
             feedback.textContent = "🎉 Ravenclaw! Perfekt! Der Hut ruft: 'Ja, genau dort gehörst du hin – ins Haus der Weisen und Wissenden!'";
             sessionStorage.setItem('station1Completed', 'true');
@@ -184,18 +192,19 @@ function initStation1() {
             const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
             
             feedback.className = 'error';
-            feedback.textContent = `${randomMessage}\n\n⏳ Du musst 10 Sekunden warten, bevor du es erneut versuchen kannst...`;
+            feedback.textContent = `${randomMessage}\n\n⏳ Du musst ${COOLDOWN_SECONDS} Sekunden warten, bevor du es erneut versuchen kannst...`;
             
             // Disable submit button
             submitBtn.disabled = true;
             
-            let timeLeft = 10;
-            const countdownInterval = setInterval(() => {
+            let timeLeft = COOLDOWN_SECONDS;
+            countdownInterval = setInterval(() => {
                 timeLeft--;
                 if (timeLeft > 0) {
                     feedback.textContent = `${randomMessage}\n\n⏳ Noch ${timeLeft} Sekunden warten...`;
                 } else {
                     clearInterval(countdownInterval);
+                    countdownInterval = null;
                     cooldownActive = false;
                     submitBtn.disabled = false;
                     feedback.textContent = "Du kannst es jetzt erneut versuchen!";
