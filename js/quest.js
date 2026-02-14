@@ -361,6 +361,142 @@ function initStation2() {
 function initStation3() {
     const continueBtn = document.getElementById('continueBtn3');
     const backBtn = document.getElementById('backBtn3');
+    const hintSection = document.getElementById('hintSection');
+    
+    // Check if station is already completed
+    const completed = sessionStorage.getItem('station3Completed');
+    if (completed === 'true') {
+        // Show all challenges as completed
+        document.getElementById('challenge1')?.classList.remove('hidden');
+        document.getElementById('challenge2')?.classList.remove('hidden');
+        document.getElementById('challenge3')?.classList.remove('hidden');
+        document.getElementById('successMessage')?.classList.remove('hidden');
+        if (hintSection) {
+            hintSection.classList.remove('hidden');
+        }
+        if (continueBtn) {
+            continueBtn.disabled = false;
+        }
+        // Disable all roll buttons when already completed
+        const rollButtons = [
+            document.getElementById('rollStealth'),
+            document.getElementById('rollInitiative'),
+            document.getElementById('rollStrength')
+        ];
+        rollButtons.forEach(btn => {
+            if (btn) {
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                btn.style.cursor = 'not-allowed';
+            }
+        });
+    }
+    
+    // D&D Challenge state
+    let stealthPassed = false;
+    let initiativePassed = false;
+    let strengthPassed = false;
+    
+    // Dice roll function (W20)
+    function rollD20() {
+        return Math.floor(Math.random() * 20) + 1;
+    }
+    
+    // Challenge 1: Stealth Check
+    const rollStealthBtn = document.getElementById('rollStealth');
+    if (rollStealthBtn) {
+        rollStealthBtn.addEventListener('click', () => {
+            const roll = rollD20();
+            const resultDiv = document.getElementById('stealthResult');
+            
+            // Animate dice
+            rollStealthBtn.innerHTML = '<span class="dice-animation">🎲</span> Würfeln (W20)';
+            setTimeout(() => {
+                rollStealthBtn.innerHTML = '🎲 Würfeln (W20)';
+            }, 500);
+            
+            if (roll >= 12) {
+                resultDiv.innerHTML = `<span class="success">✅ Du hast eine <strong>${roll}</strong> gewürfelt! Du schleichst erfolgreich vorbei.</span>`;
+                stealthPassed = true;
+                rollStealthBtn.disabled = true;
+                rollStealthBtn.style.opacity = '0.5';
+                rollStealthBtn.style.cursor = 'not-allowed';
+                
+                // Show next challenge
+                setTimeout(() => {
+                    document.getElementById('challenge2')?.classList.remove('hidden');
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = `<span class="error">❌ Du hast nur eine <strong>${roll}</strong> gewürfelt (benötigt: 12+). Versuche es nochmal!</span>`;
+            }
+        });
+    }
+    
+    // Challenge 2: Initiative Check
+    const rollInitiativeBtn = document.getElementById('rollInitiative');
+    if (rollInitiativeBtn) {
+        rollInitiativeBtn.addEventListener('click', () => {
+            const roll = rollD20();
+            const resultDiv = document.getElementById('initiativeResult');
+            
+            // Animate dice
+            rollInitiativeBtn.innerHTML = '<span class="dice-animation">🎲</span> Würfeln (W20)';
+            setTimeout(() => {
+                rollInitiativeBtn.innerHTML = '🎲 Würfeln (W20)';
+            }, 500);
+            
+            if (roll >= 10) {
+                resultDiv.innerHTML = `<span class="success">✅ Du hast eine <strong>${roll}</strong> gewürfelt! Du bist schneller als der Wächter.</span>`;
+                initiativePassed = true;
+                rollInitiativeBtn.disabled = true;
+                rollInitiativeBtn.style.opacity = '0.5';
+                rollInitiativeBtn.style.cursor = 'not-allowed';
+                
+                // Show next challenge
+                setTimeout(() => {
+                    document.getElementById('challenge3')?.classList.remove('hidden');
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = `<span class="error">❌ Du hast nur eine <strong>${roll}</strong> gewürfelt (benötigt: 10+). Versuche es nochmal!</span>`;
+            }
+        });
+    }
+    
+    // Challenge 3: Strength Check
+    const rollStrengthBtn = document.getElementById('rollStrength');
+    if (rollStrengthBtn) {
+        rollStrengthBtn.addEventListener('click', () => {
+            const roll = rollD20();
+            const resultDiv = document.getElementById('strengthResult');
+            
+            // Animate dice
+            rollStrengthBtn.innerHTML = '<span class="dice-animation">🎲</span> Würfeln (W20)';
+            setTimeout(() => {
+                rollStrengthBtn.innerHTML = '🎲 Würfeln (W20)';
+            }, 500);
+            
+            if (roll >= 8) {
+                resultDiv.innerHTML = `<span class="success">✅ Du hast eine <strong>${roll}</strong> gewürfelt! Du hebst den Schatz erfolgreich.</span>`;
+                strengthPassed = true;
+                rollStrengthBtn.disabled = true;
+                rollStrengthBtn.style.opacity = '0.5';
+                rollStrengthBtn.style.cursor = 'not-allowed';
+                
+                // All challenges completed!
+                setTimeout(() => {
+                    document.getElementById('successMessage')?.classList.remove('hidden');
+                    if (hintSection) {
+                        hintSection.classList.remove('hidden');
+                    }
+                    if (continueBtn) {
+                        continueBtn.disabled = false;
+                    }
+                }, 1000);
+            } else {
+                resultDiv.innerHTML = `<span class="error">❌ Du hast nur eine <strong>${roll}</strong> gewürfelt (benötigt: 8+). Versuche es nochmal!</span>`;
+            }
+        });
+    }
     
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
