@@ -1,11 +1,76 @@
 <div class="card">
-    <h1 style="text-align: center;">🎯 Station 3 – [Titel folgt]</h1>
+    <h1 style="text-align: center;">🎲 Station 3 – Das Abenteuer beginnt</h1>
     <p class="note">
-        Hier wird bald eine spannende Aufgabe erscheinen...
+        In der Bibliothek fällt dir zwischen den Zauberbüchern ein besonderes Werk in die Hände: <strong>„Das große Buch der Abenteuer"</strong>. Als du es aufschlägst, beginnen die Seiten zu leuchten, und du findest dich plötzlich in einer epischen Geschichte wieder...
     </p>
+    
+    <div style="background: rgba(75, 0, 130, 0.2); padding: 1rem; border-radius: 8px; margin: 1.5rem 0; border-left: 4px solid #9cffb0;">
+        <p style="font-style: italic; margin: 0;">
+            <strong>🗡️ Die Quest:</strong> Du bist ein mutiger Abenteurer, der in ein feindliches Lager eindringen muss, um einen wertvollen Schatz zu bergen. Doch der Weg ist gefährlich...
+        </p>
+    </div>
 
-    <p>Diese Station ist noch in Entwicklung. Für jetzt kannst du einfach fortfahren.</p>
+    <div id="challengeContainer">
+        <div id="challenge1" class="challenge-section">
+            <h3>🌙 Challenge 1: Stealth-Check</h3>
+            <p>Du schleichst dich durch die Schatten. Würfle einen <strong>Stealth-Check (W20)</strong>. Du benötigst <strong>mindestens 12</strong>, um unentdeckt zu bleiben!</p>
+            <button id="rollStealth" class="btn" style="background: #4b0082; margin-bottom: 0.5rem;">🎲 Würfeln (W20)</button>
+            <div id="stealthResult" role="status" aria-live="polite" style="min-height: 1.5rem; margin-top: 0.5rem;"></div>
+        </div>
+
+        <div id="challenge2" class="challenge-section hidden">
+            <h3>⚔️ Challenge 2: Initiative-Check</h3>
+            <p>Ein Wächter entdeckt dich! Schnell – würfle einen <strong>Initiative-Check (W20)</strong>. Du benötigst <strong>mindestens 10</strong>, um schneller zu sein!</p>
+            <button id="rollInitiative" class="btn" style="background: #4b0082; margin-bottom: 0.5rem;">🎲 Würfeln (W20)</button>
+            <div id="initiativeResult" role="status" aria-live="polite" style="min-height: 1.5rem; margin-top: 0.5rem;"></div>
+        </div>
+
+        <div id="challenge3" class="challenge-section hidden">
+            <h3>💪 Challenge 3: Strength-Check</h3>
+            <p>Der Schatz ist schwer! Würfle einen <strong>Strength-Check (W20)</strong>. Du benötigst <strong>mindestens 8</strong>, um ihn zu heben!</p>
+            <button id="rollStrength" class="btn" style="background: #4b0082; margin-bottom: 0.5rem;">🎲 Würfeln (W20)</button>
+            <div id="strengthResult" role="status" aria-live="polite" style="min-height: 1.5rem; margin-top: 0.5rem;"></div>
+        </div>
+    </div>
+
+    <div id="successMessage" class="hidden" style="margin-top: 1.5rem; padding: 1rem; background: rgba(156, 255, 176, 0.15); border: 2px solid #9cffb0; border-radius: 8px; text-align: center;">
+        <p style="font-size: 1.2rem; font-weight: bold; color: #9cffb0; margin: 0;">🏆 Glückwunsch, Abenteurer! Du hast alle Challenges gemeistert!</p>
+        <p style="margin: 0.5rem 0 0 0; font-style: italic;">Das Buch schließt sich, und du findest dich zurück in der Bibliothek. Doch in deiner Hand hältst du einen wertvollen Hinweis...</p>
+    </div>
+
+    <div id="hintSection" class="hidden" style="margin-top: 1.5rem; padding: 1rem; background: rgba(156, 255, 176, 0.1); border: 1px solid #9cffb0; border-radius: 4px;">
+        <p style="margin: 0;" class="success">💡 <strong>Dritter Hinweis:</strong> Dauerschließfach</p>
+    </div>
 
     <button id="backBtn3" class="btn">⬅️ Zurück zu Station 2</button>
-    <button id="continueBtn3" class="btn">➡️ Weiter zu Station 4</button>
+    <button id="continueBtn3" class="btn" disabled>➡️ Weiter zu Station 4</button>
 </div>
+
+<style>
+    .challenge-section {
+        background: rgba(43, 43, 61, 0.5);
+        padding: 1.2rem;
+        border-radius: 8px;
+        margin-bottom: 1.5rem;
+        border: 1px solid #2b2b3d;
+    }
+    
+    .challenge-section h3 {
+        margin-top: 0;
+        color: #9cffb0;
+    }
+    
+    .challenge-section.hidden {
+        display: none;
+    }
+    
+    .dice-animation {
+        display: inline-block;
+        animation: spin 0.5s ease-in-out;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+</style>
