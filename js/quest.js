@@ -124,54 +124,84 @@ function initStation0(isUnlocked) {
     }
 }
 
-// Station 1: Rätsel
+// Station 1: Der sprechende Hut
 function initStation1() {
-    const validAnswers = new Set([
-        "löwe", "loewe", "lion", "gryffindor",
-        "rabe", "raven", "ravenclaw"
-    ]);
+    const correctHouse = 'ravenclaw';
+    let cooldownActive = false;
     
-    const form = document.getElementById('riddleForm');
-    const answerInput = document.getElementById('answer');
+    const form = document.getElementById('houseForm');
+    const submitBtn = document.getElementById('submitBtn');
     const feedback = document.getElementById('feedback');
+    const hintSection = document.getElementById('hintSection');
     const backBtn = document.getElementById('backBtn');
     const continueBtn = document.getElementById('continueBtn1');
     
-    function normalize(s) {
-        return s
-            .toLowerCase()
-            .trim()
-            .normalize("NFD")
-            .replace(/[ -]/g, "");
-    }
+    const funnyMessages = [
+        "🎭 Der Hut runzelt die Stirn... 'Nein, nein, das passt nicht. Versuch es nochmal!'",
+        "🧙 'Hmm, ich glaube, du hast nicht gut zugehört. Weisheit und Wissen, erinnerst du dich?'",
+        "📚 Der Hut seufzt dramatisch: 'Das ist nicht das Haus für jemanden mit so viel Verstand!'",
+        "🦉 'Falsch! Die Eulen würden dich dort niemals akzeptieren. Versuch's nochmal!'",
+        "✨ 'Nope! Der Hut schüttelt sich. Das Haus der Weisen ruft nach dir... aber das war's nicht!'"
+    ];
     
     form.addEventListener('submit', (e) => {
         e.preventDefault();
-        const val = normalize(answerInput.value);
         
-        if (!val) {
-            feedback.className = 'error';
-            feedback.textContent = "Bitte gib eine Antwort ein.";
+        if (cooldownActive) {
             return;
         }
         
-        if (validAnswers.has(val)) {
+        const selectedHouse = document.querySelector('input[name="house"]:checked');
+        
+        if (!selectedHouse) {
+            feedback.className = 'error';
+            feedback.textContent = "Bitte wähle ein Haus aus!";
+            return;
+        }
+        
+        if (selectedHouse.value === correctHouse) {
             feedback.className = 'success';
-            feedback.textContent = "Richtig! ✨ Super! Weiter zur nächsten Station...";
+            feedback.textContent = "🎉 Ravenclaw! Perfekt! Der Hut ruft: 'Ja, genau dort gehörst du hin – ins Haus der Weisen und Wissenden!'";
             sessionStorage.setItem('station1Completed', 'true');
+            
+            // Show hint section
+            if (hintSection) {
+                hintSection.classList.remove('hidden');
+            }
             
             // Enable continue button
             if (continueBtn) {
                 continueBtn.disabled = false;
             }
+            
+            // Disable form
+            submitBtn.disabled = true;
+            const radioButtons = document.querySelectorAll('input[name="house"]');
+            radioButtons.forEach(radio => radio.disabled = true);
         } else {
+            // Wrong answer - activate cooldown
+            cooldownActive = true;
+            const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
+            
             feedback.className = 'error';
-            const snark = [
-                "Fast! Aber die Katze schüttelt nur den Kopf.",
-                "Nope – die sprechende Mütze kichert leise.",
-                "Nicht ganz. Die Eulen tuscheln schon … versuch's nochmal!"
-            ];
-            feedback.textContent = snark[Math.floor(Math.random() * snark.length)];
+            feedback.textContent = `${randomMessage}\n\n⏳ Du musst 10 Sekunden warten, bevor du es erneut versuchen kannst...`;
+            
+            // Disable submit button
+            submitBtn.disabled = true;
+            
+            let timeLeft = 10;
+            const countdownInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft > 0) {
+                    feedback.textContent = `${randomMessage}\n\n⏳ Noch ${timeLeft} Sekunden warten...`;
+                } else {
+                    clearInterval(countdownInterval);
+                    cooldownActive = false;
+                    submitBtn.disabled = false;
+                    feedback.textContent = "Du kannst es jetzt erneut versuchen!";
+                    feedback.className = '';
+                }
+            }, 1000);
         }
     });
     
@@ -187,6 +217,9 @@ function initStation1() {
         const completed = sessionStorage.getItem('station1Completed');
         if (completed === 'true') {
             continueBtn.disabled = false;
+            if (hintSection) {
+                hintSection.classList.remove('hidden');
+            }
         }
         
         continueBtn.addEventListener('click', (e) => {
