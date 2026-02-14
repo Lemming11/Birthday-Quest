@@ -516,10 +516,59 @@ function initStation3() {
     }
 }
 
-// Station 4: Platzhalter
+// Station 4: Die Grüne Drachenschenke (Vegan Tavern)
 function initStation4() {
     const continueBtn = document.getElementById('continueBtn4');
     const backBtn = document.getElementById('backBtn4');
+    const menuForm = document.getElementById('menuForm');
+    const menuInput = document.getElementById('menuInput');
+    const submitBtn = document.getElementById('submitBtn4');
+    const feedback = document.getElementById('feedback4');
+    const hintSection = document.getElementById('hintSection4');
+    
+    // Check if station is already completed
+    if (sessionStorage.getItem('station4Completed') === 'true') {
+        if (continueBtn) continueBtn.disabled = false;
+        if (hintSection) hintSection.classList.remove('hidden');
+    }
+    
+    if (menuForm) {
+        menuForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const answer = menuInput.value.trim().toLowerCase();
+            
+            // Correct answer is "1" (first position on the menu)
+            // Accept various formats: "1", "eins", "erste", etc.
+            const isCorrect = answer === '1' || 
+                            answer === '1.' ||
+                            answer === 'eins' ||
+                            answer === 'erste' ||
+                            answer === 'erster' ||
+                            answer === 'der erste' ||
+                            /^(platz|nummer|position)\s*1\.?$/.test(answer);
+            
+            if (isCorrect) {
+                feedback.innerHTML = `<span class="success">✅ Richtig! Die „Erbsen-Minz-Suppe der Erholung" steht an <strong>erster Stelle</strong> auf der Speisekarte. Die Wirtin serviert dir eine dampfende Schüssel – köstlich und stärkend!</span>`;
+                feedback.className = 'success';
+                
+                // Show hint section after a brief delay
+                setTimeout(() => {
+                    if (hintSection) {
+                        hintSection.classList.remove('hidden');
+                    }
+                    if (continueBtn) {
+                        continueBtn.disabled = false;
+                    }
+                    // Mark station as completed
+                    sessionStorage.setItem('station4Completed', 'true');
+                }, 800);
+            } else {
+                feedback.innerHTML = `<span class="error">❌ Hmm, das scheint nicht zu stimmen. Die Wirtin schüttelt den Kopf. Lies das Rätsel nochmal genau – die Antwort ist eine <strong>Zahl</strong>!</span>`;
+                feedback.className = 'error';
+            }
+        });
+    }
     
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
