@@ -55,6 +55,10 @@ async function loadStation(stationNumber) {
                     initStation3();
                 } else if (stationNumber === 4) {
                     initStation4();
+                } else if (stationNumber === 5) {
+                    initStation5();
+                } else if (stationNumber === 6) {
+                    initStation6();
                 }
             } catch (error) {
                 content.innerHTML = '<h1>❌ Fehler</h1><p>Diese Station existiert noch nicht.</p>';
@@ -238,12 +242,76 @@ function initStation1() {
     }
 }
 
-// Station 2: Nonogram
+// Station 2: Platzhalter
 function initStation2() {
     const continueBtn = document.getElementById('continueBtn2');
     const backBtn = document.getElementById('backBtn2');
-    const resetBtn = document.getElementById('resetBtn');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station2Completed', 'true');
+            loadStation(3);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(1);
+        });
+    }
+}
+
+// Station 3: Platzhalter
+function initStation3() {
+    const continueBtn = document.getElementById('continueBtn3');
+    const backBtn = document.getElementById('backBtn3');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station3Completed', 'true');
+            loadStation(4);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(2);
+        });
+    }
+}
+
+// Station 4: Platzhalter
+function initStation4() {
+    const continueBtn = document.getElementById('continueBtn4');
+    const backBtn = document.getElementById('backBtn4');
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            sessionStorage.setItem('station4Completed', 'true');
+            loadStation(5);
+        });
+    }
+    
+    if (backBtn) {
+        backBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            loadStation(3);
+        });
+    }
+}
+
+// Station 5: Nonogram
+function initStation5() {
+    const continueBtn = document.getElementById('continueBtn5');
+    const backBtn = document.getElementById('backBtn5');
+    const resetBtn = document.getElementById('resetBtn5');
     const feedback = document.getElementById('nonogram-feedback');
+    const hintSection = document.getElementById('hintSection5');
     
     // Heart pattern (9x9 grid)
     // 1 = filled, 0 = empty
@@ -459,7 +527,13 @@ function initStation2() {
             });
             feedback.className = 'success';
             feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
-            sessionStorage.setItem('station2Completed', 'true');
+            sessionStorage.setItem('station5Completed', 'true');
+            
+            // Show hint section
+            if (hintSection) {
+                hintSection.classList.remove('hidden');
+            }
+            
             if (continueBtn) {
                 continueBtn.disabled = false;
             }
@@ -476,9 +550,13 @@ function initStation2() {
         feedback.className = '';
         feedback.textContent = '';
         // Don't disable the continue button if station is already completed
-        const completed = sessionStorage.getItem('station2Completed');
+        const completed = sessionStorage.getItem('station5Completed');
         if (continueBtn && completed !== 'true') {
             continueBtn.disabled = true;
+        }
+        // Hide hint section when resetting
+        if (hintSection && completed !== 'true') {
+            hintSection.classList.add('hidden');
         }
     }
     
@@ -531,7 +609,7 @@ function initStation2() {
     document.addEventListener('touchend', endDragging);
     
     // Check if already completed
-    const completed = sessionStorage.getItem('station2Completed');
+    const completed = sessionStorage.getItem('station5Completed');
     if (completed === 'true') {
         // Restore solution
         puzzleSolved = true;
@@ -539,6 +617,9 @@ function initStation2() {
         createGrid();
         feedback.className = 'success';
         feedback.textContent = '❤️ Perfekt! Du hast das Herz enthüllt! Weiter zur nächsten Station...';
+        if (hintSection) {
+            hintSection.classList.remove('hidden');
+        }
         if (continueBtn) {
             continueBtn.disabled = false;
         }
@@ -554,47 +635,26 @@ function initStation2() {
     if (continueBtn) {
         continueBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loadStation(3);
+            loadStation(6);
         });
     }
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loadStation(1);
-        });
-    }
-}
-
-// Station 3: Platzhalter
-function initStation3() {
-    const continueBtn = document.getElementById('continueBtn3');
-    const backBtn = document.getElementById('backBtn3');
-    
-    if (continueBtn) {
-        continueBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            sessionStorage.setItem('station3Completed', 'true');
             loadStation(4);
         });
     }
-    
-    if (backBtn) {
-        backBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            loadStation(2);
-        });
-    }
 }
 
-// Station 4: Platzhalter
-function initStation4() {
-    const backBtn = document.getElementById('backBtn4');
+// Station 6: Platzhalter
+function initStation6() {
+    const backBtn = document.getElementById('backBtn6');
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
             e.preventDefault();
-            loadStation(3);
+            loadStation(5);
         });
     }
 }
