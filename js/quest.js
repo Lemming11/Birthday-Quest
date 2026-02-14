@@ -928,9 +928,111 @@ function initStation5() {
     }
 }
 
-// Station 6: Platzhalter
+// Station 6: Stromberg Quiz
 function initStation6() {
+    const form = document.getElementById('strombergForm');
+    const submitBtn = document.getElementById('submitBtn6');
+    const feedback = document.getElementById('feedback6');
+    const continueBtn = document.getElementById('continueBtn6');
     const backBtn = document.getElementById('backBtn6');
+    const hintSection = document.getElementById('hintSection6');
+    
+    // Correct answers: b, a, a, b, c
+    const correctAnswers = {
+        q1: 'b',  // Tanja
+        q2: 'a',  // Der Dicke
+        q3: 'a',  // Capitol Versicherung
+        q4: 'b',  // Er ist sehr tugendhaft
+        q5: 'c'   // Das A-Team
+    };
+    
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            let allCorrect = true;
+            let answeredAll = true;
+            
+            // Check if all questions are answered
+            for (let i = 1; i <= 5; i++) {
+                if (!formData.get(`q${i}`)) {
+                    answeredAll = false;
+                    break;
+                }
+            }
+            
+            if (!answeredAll) {
+                feedback.innerHTML = '❌ Bitte beantworte alle Fragen!';
+                feedback.className = 'error';
+                return;
+            }
+            
+            // Check answers
+            for (let i = 1; i <= 5; i++) {
+                const userAnswer = formData.get(`q${i}`);
+                if (userAnswer !== correctAnswers[`q${i}`]) {
+                    allCorrect = false;
+                    break;
+                }
+            }
+            
+            if (allCorrect) {
+                feedback.innerHTML = '🎉 Perfekt! Das Herz leuchtet hell auf – du hast alle Fragen richtig beantwortet!<br>Du weißt genau, dass Stromberg am besten <strong>zu zweit</strong> geschaut wird. ❤️';
+                feedback.className = 'success';
+                
+                if (hintSection) {
+                    hintSection.classList.remove('hidden');
+                }
+                if (continueBtn) {
+                    continueBtn.disabled = false;
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                }
+                
+                // Mark station as completed
+                sessionStorage.setItem('station6Completed', 'true');
+            } else {
+                feedback.innerHTML = '❌ Nicht ganz richtig! Erinnere dich an die gemeinsamen Abende mit Stromberg...<br>Versuche es noch einmal!';
+                feedback.className = 'error';
+            }
+        });
+    }
+    
+    if (continueBtn) {
+        continueBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            // Final station - show completion message
+            const content = document.getElementById('content');
+            content.innerHTML = `
+                <div class="card" style="text-align: center;">
+                    <h1>🎉 Herzlichen Glückwunsch! 🎉</h1>
+                    <p class="success" style="font-size: 1.2rem; margin: 2rem 0;">
+                        Du hast alle Stationen der Birthday-Quest erfolgreich gemeistert!
+                    </p>
+                    <p class="note" style="margin: 1.5rem 0;">
+                        Die gesammelten Hinweise führen dich nun zu deinem Geschenk...
+                    </p>
+                    <div style="background: rgba(75, 0, 130, 0.3); padding: 1.5rem; border-radius: 8px; margin: 2rem 0;">
+                        <p style="font-weight: bold; font-size: 1.1rem; margin-bottom: 1rem;">💡 Deine Hinweise:</p>
+                        <p style="line-height: 2;">
+                            1️⃣ Universität<br>
+                            2️⃣ Bibliothek<br>
+                            3️⃣ Dauerschließfach<br>
+                            4️⃣ 1<br>
+                            5️⃣ 9<br>
+                            6️⃣ 2
+                        </p>
+                    </div>
+                    <p class="note" style="font-style: italic; color: #9cffb0;">
+                        Kombiniere die Hinweise und finde dein Geschenk! ✨
+                    </p>
+                    <button onclick="loadStation(0)" class="btn">🏠 Zurück zum Start</button>
+                </div>
+            `;
+        });
+    }
     
     if (backBtn) {
         backBtn.addEventListener('click', (e) => {
