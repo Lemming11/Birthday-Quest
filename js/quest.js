@@ -491,6 +491,8 @@ function initStation3() {
                     if (continueBtn) {
                         continueBtn.disabled = false;
                     }
+                    // Mark station as completed when all challenges are done
+                    sessionStorage.setItem('station3Completed', 'true');
                 }, 1000);
             } else {
                 resultDiv.innerHTML = `<span class="error">❌ Du hast nur eine <strong>${roll}</strong> gewürfelt (benötigt: 8+). Versuche es nochmal!</span>`;
