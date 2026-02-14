@@ -442,41 +442,41 @@ function initStation2() {
         return null;
     }
     
-    // Add global touchmove listener to handle dragging across cells
-    document.addEventListener('touchmove', (e) => {
-        if (!isDragging || dragFillValue === null || puzzleSolved) return;
-        e.preventDefault(); // Prevent scrolling while dragging
-        
-        const touch = e.touches[0];
-        const cell = getCellFromTouch(touch);
-        
-        if (cell) {
-            const r = parseInt(cell.dataset.row);
-            const c = parseInt(cell.dataset.col);
-            if (userGrid[r][c] !== dragFillValue) {
-                userGrid[r][c] = dragFillValue;
-                updateCellStyle(cell, r, c);
+    // Add touchmove listener to the nonogram container for dragging across cells
+    const nonogramContainer = document.getElementById('nonogram-container');
+    if (nonogramContainer) {
+        nonogramContainer.addEventListener('touchmove', (e) => {
+            if (!isDragging || dragFillValue === null || puzzleSolved) return;
+            if (e.touches.length === 0) return; // Safety check for touch events
+            
+            // Only prevent default if we're actively dragging to avoid blocking page scroll
+            const touch = e.touches[0];
+            const cell = getCellFromTouch(touch);
+            
+            if (cell) {
+                e.preventDefault(); // Prevent scrolling only when over grid cells
+                const r = parseInt(cell.dataset.row);
+                const c = parseInt(cell.dataset.col);
+                if (userGrid[r][c] !== dragFillValue) {
+                    userGrid[r][c] = dragFillValue;
+                    updateCellStyle(cell, r, c);
+                }
             }
-        }
-    }, { passive: false });
+        }, { passive: false });
+    }
     
-    // Add global mouseup listener to stop dragging and check solution
-    document.addEventListener('mouseup', () => {
+    // Helper function to end dragging and check solution
+    function endDragging() {
         if (isDragging) {
             isDragging = false;
             dragFillValue = null;
             checkSolution();
         }
-    });
+    }
     
-    // Add global touchend listener to stop dragging and check solution
-    document.addEventListener('touchend', () => {
-        if (isDragging) {
-            isDragging = false;
-            dragFillValue = null;
-            checkSolution();
-        }
-    });
+    // Add global mouseup and touchend listeners to stop dragging and check solution
+    document.addEventListener('mouseup', endDragging);
+    document.addEventListener('touchend', endDragging);
     
     // Check if already completed
     const completed = sessionStorage.getItem('station2Completed');
