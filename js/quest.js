@@ -1070,22 +1070,25 @@ function createConfetti() {
             confetti.className = 'confetti';
             confetti.style.left = Math.random() * 100 + '%';
             confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.animationDelay = Math.random() * 0.5 + 's';
-            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            const delay = Math.random() * 0.5;
+            const duration = Math.random() * 2 + 2;
+            confetti.style.animationDelay = delay + 's';
+            confetti.style.animationDuration = duration + 's';
             
             container.appendChild(confetti);
             
-            // Entferne Konfetti nach Animation
+            // Entferne Konfetti nach Animation (delay + duration in Millisekunden)
             setTimeout(() => {
                 confetti.remove();
-            }, 4000);
+            }, (delay + duration) * 1000);
         }, i * 20);
     }
     
-    // Entferne Container nach allen Animationen
+    // Entferne Container nach allen Animationen (spawn time + max delay + max duration)
+    // 80 pieces * 20ms = 1600ms + 500ms max delay + 4000ms max duration = 6100ms
     setTimeout(() => {
         container.remove();
-    }, 5000);
+    }, 6500);
 }
 
 // Global verfügbar machen für inline onclick falls nötig
