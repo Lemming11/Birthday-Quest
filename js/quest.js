@@ -1049,6 +1049,43 @@ function initStation7() {
             loadStation(6);
         });
     }
+    
+    // Konfetti-Animation beim Laden der Station
+    createConfetti();
+}
+
+// Konfetti-Animation
+function createConfetti() {
+    const container = document.getElementById('confettiContainer');
+    if (!container) return;
+    
+    container.className = 'confetti-container';
+    
+    const colors = ['#9cffb0', '#4b0082', '#6a0dad', '#d4c5ff', '#bfb6ff', '#ff7a7a', '#ffd700', '#ff69b4'];
+    const confettiCount = 80;
+    
+    for (let i = 0; i < confettiCount; i++) {
+        setTimeout(() => {
+            const confetti = document.createElement('div');
+            confetti.className = 'confetti';
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.animationDelay = Math.random() * 0.5 + 's';
+            confetti.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            
+            container.appendChild(confetti);
+            
+            // Entferne Konfetti nach Animation
+            setTimeout(() => {
+                confetti.remove();
+            }, 4000);
+        }, i * 20);
+    }
+    
+    // Entferne Container nach allen Animationen
+    setTimeout(() => {
+        container.remove();
+    }, 5000);
 }
 
 // Global verfügbar machen für inline onclick falls nötig
